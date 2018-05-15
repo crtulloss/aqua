@@ -10,6 +10,9 @@ from time import sleep
 
 # GPS interaction strings
 gpsCheck = "AT+CGNSINF\r"
+gpsPowerCheck = "AT+CGNSPWR?\r"
+gpsPowerOn = "AT+CGNSPWR=1\r"
+gpsPowerOff = "AT+CGNSPWR=0\r"
 
 homeNorth = 41.8357		# olney street
 homeSouth = 41.8226		# williams street
@@ -23,10 +26,8 @@ def checkForFix():
 	# Start the serial connection
 	ser=serial.Serial('/dev/serial0', 115200, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, timeout=1)
 	# Turn on the GPS
-	powerOn = "AT+CGNSPWR=1\r"
-	powerCheck = "AT+CGNSPWR?\r"
-	ser.write(powerOn.encode())
-	ser.write(powerCheck.encode())
+	ser.write(gpsPowerOn.encode())
+	ser.write(gpsPowerCheck.encode())
 	while True:
 		response = str(ser.readline())
 		if (" 1" in response):
@@ -47,7 +48,7 @@ def checkForFix():
 				print("still looking for fix")
 				return False
 			else:
-				#print "something else went wrong"
+				# still waiting for response
 				ser.write(gpsCheck.encode())
 
 # Read the GPS data for Latitude and Longitude
@@ -64,6 +65,8 @@ def getCoord():
 			print("Latitude: %s" % lat)
 			lon = array[4]
 			print("Longitude: %s\n" % lon)
+			# turn GPS off
+			ser.write(gpsPowerOff.encode())
 			return (lat,lon)
 
 # figure out if we are in home zone or not - GPS thresholds defined above
