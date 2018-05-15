@@ -74,7 +74,7 @@ class BicycleController(Machine):
             accelData = '%s\t%s\t%s\t%s\n' % (t, x, y, z)
             misc.writeToFile(self.accelFileName, accelData)
             # sleep
-            time.sleep(timeBetweenAccelReads)
+            time.sleep(BicycleController.timeBetweenAccelReads)
         # location check
         # get GPS coordinates
         # if we can't get a fix, it will use the last one
