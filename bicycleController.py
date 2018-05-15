@@ -118,3 +118,14 @@ class BicycleController(Machine):
         self.add_transition('slumber', 'commute', 'nap', conditions=['notMoving'])
         self.add_transition('there', 'commute', 'ride')
         self.add_transition('back_again', 'ride', 'commute')
+<<<<<<< HEAD
+=======
+# tests
+#testController = BicycleController()
+
+#testController.state
+#testController.awaken()
+#testController.state
+#testController.sleep()
+#testController.state
+>>>>>>> 74bcd673fdde032280b62cf872ad386ba83740b5
