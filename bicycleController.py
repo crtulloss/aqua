@@ -58,6 +58,7 @@ class BicycleController(Machine):
             illuminator.lightsOff()
         # check previous state - if commute, make new data file
         if (self.previous == 'commute'):
+            print('creating new data files')
             self.accelFileName = misc.makeFileName('accel')
             self.gpsFileName = misc.makeFileName('gps')
         # otherwise, use the one that already exists
@@ -67,7 +68,8 @@ class BicycleController(Machine):
         # main data collection: accelerometer
         for reading in range(BicycleController.accelReadsBetweenGPS):
             # get accelerometer data and store in file
-            (x,y,z,temp) = accel.read_xyz()
+            #(x,y,z,temp) = accel.read_xyz()
+            (x,y,z,temp) = (1,2,3,4)
             t = misc.makeTimeStamp()
             accelData = '%s\t%s\t%s\t%s\n' % (t, x, y, z)
             misc.writeToFile(self.accelFileName, accelData)
