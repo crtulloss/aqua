@@ -5,7 +5,7 @@
 # defines the BicycleController class to manage the controller state machine
 
 from transitions import Machine
-from time import sleep
+import time
 import aquaGPS
 import darknessSensor
 import illuminator
@@ -41,7 +41,7 @@ class BicycleController(Machine):
             # check if we are home - if not, begin ride
             if not (aquaGPS.homeZone(lat,lon)):
                 self.there()
-        sleep(30)
+        time.sleep(30)
         # if we couldn't get a fix, or are still home, try to nap after 30s
         # this transition will fail if still moving
         if not self.slumber():
@@ -72,7 +72,7 @@ class BicycleController(Machine):
             accelData = '%s\t%s\t%s\t%s\n' % (t, x, y, z)
             misc.writeToFile(self.accelFileName, accelData)
             # sleep
-            sleep(timeBetweenAccelReads)
+            time.sleep(timeBetweenAccelReads)
         # location check
         # get GPS coordinates
         # if we can't get a fix, it will use the last one
