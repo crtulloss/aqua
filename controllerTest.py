@@ -5,7 +5,7 @@
 # manual test of the BicycleController state machine
 
 from transitions import Machine
-import time
+from time import sleep
 import aquaGPS
 import darknessSensor
 import illuminator

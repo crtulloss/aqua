@@ -5,7 +5,7 @@
 # defines the BicycleController class to manage the controller state machine
 
 from transitions import Machine
-import time
+from time import sleep
 import aquaGPS
 import darknessSensor
 import illuminator
