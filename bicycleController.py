@@ -57,7 +57,7 @@ class BicycleController(Machine):
         else:
             illuminator.lightsOff()
         # check previous state - if commute, make new data file
-        if (self.previous == commute):
+        if (self.previous == 'commute'):
             self.accelFileName = misc.makeFileName('accel')
             self.gpsFileName = misc.makeFileName('gps')
         # otherwise, use the one that already exists
