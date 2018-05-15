@@ -41,7 +41,7 @@ class BicycleController(Machine):
             # check if we are home - if not, begin ride
             if not (aquaGPS.homeZone(lat,lon)):
                 self.there()
-        time.sleep(30)
+        time.sleep(BicycleController.timeBetweenGPSReads)
         # if we couldn't get a fix, or are still home, try to nap after 30s
         # this transition will fail if still moving
         if not self.slumber():
@@ -65,7 +65,7 @@ class BicycleController(Machine):
             misc.writeToFile(self.accelFileName, self.accelDataBuffer)
             self.accelDataBuffer = ''
         # main data collection: accelerometer
-        for reading in range(accelReadsBetweenGPS):
+        for reading in range(BicycleController.accelReadsBetweenGPS):
             # get accelerometer data and store in file
             (x,y,z,temp) = accel.read_xyz()
             t = misc.makeTimeStamp()
