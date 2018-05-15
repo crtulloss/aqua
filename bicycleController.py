@@ -61,8 +61,11 @@ class BicycleController(Machine):
             print('creating new data files')
             self.accelFileName = misc.makeFileName('accel')
             self.gpsFileName = misc.makeFileName('gps')
+            # so that we don't accidentally create new files again
+            self.previous == 'ride'
         # otherwise, use the one that already exists
         else:
+            print('using existing data files')
             misc.writeToFile(self.accelFileName, self.accelDataBuffer)
             self.accelDataBuffer = ''
         # main data collection: accelerometer
