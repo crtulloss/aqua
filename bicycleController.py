@@ -63,6 +63,7 @@ class BicycleController(Machine):
             self.gpsFileName = misc.makeFileName('gps')
             # so that we don't accidentally create new files again
             self.previous == 'ride'
+            print(self.previous)
         # otherwise, use the one that already exists
         else:
             print('using existing data files')
