@@ -74,8 +74,8 @@ class BicycleController(Machine):
             sleep(timeBetweenAccelReads)
         # location check
         # get GPS coordinates
-    	# if we can't get a fix, it will use the last one
-    	if aquaGPS.checkForFix():
+        # if we can't get a fix, it will use the last one
+        if aquaGPS.checkForFix():
             (lat,lon) = aquaGPS.getCoord()
             t = misc.makeTimeStamp()
             # log GPS data
