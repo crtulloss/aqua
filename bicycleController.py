@@ -22,7 +22,7 @@ class BicycleController(Machine):
     # on_enter callback for nap
     def housekeep(self):
         print('housekeeping')
-        illuminator.turnLightsOff()
+        illuminator.lightsOff()
         #turnGPSOff()
         misc.checkWiFi()
 
@@ -41,7 +41,8 @@ class BicycleController(Machine):
             # check if we are home - if not, begin ride
             if not (aquaGPS.homeZone(lat,lon)):
                 self.there()
-        # if we couldn't get a fix, or are still home, try to nap
+        sleep(30)
+        # if we couldn't get a fix, or are still home, try to nap after 30s
         # this transition will fail if still moving
         if not self.slumber():
             # continue monitoring
@@ -97,7 +98,7 @@ class BicycleController(Machine):
     # CONDITONS
     # condition for commute -> nap transition
     def notMoving(self):
-        return True
+        return False
 
     # STATES
     nap = {'name':'nap', 'on_enter':['housekeep'], 'on_exit':['setPrevious']}
