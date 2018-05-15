@@ -71,6 +71,11 @@ def getCoord():
 
 # figure out if we are in home zone or not - GPS thresholds defined above
 def homeZone(lat, lon):
+	# convert strings to floats
+	if type(lat) == str:
+		lat = float(lat)
+	if type(lon) == str:
+		lon = float(lon)
 	if (lat > homeNorth) | (lat < homeSouth) | (lon > homeEast) | (lon < homeWest):
 		return False
 	else:
