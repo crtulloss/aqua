@@ -22,28 +22,28 @@ class BicycleController(Machine):
     # on_enter callback for nap
     def housekeep(self):
         print('housekeeping')
-        turnLightsOff()
-        turnGPSOff()
-        checkWiFi()
+        illuminator.turnLightsOff()
+        #turnGPSOff()
+        misc.checkWiFi()
 
     # on_enter callback for commute
     def monitorSensors(self):
         print('monitoring sensors')
         # check darkness and adjust LEDs appropriately
-        if (isDark()):
-            lightsOn()
+        if (darknessSensor.isDark()):
+            illuminator.lightsOn()
         else:
-            lightsOff()
+            illuminator.lightsOff()
         # location check
         # get GPS coordinates
-        (lat,lon) = getCoord()
+        (lat,lon) = aquaGPS.getCoord()
         # check if we are home - if so, wait 30 seconds then try to nap
-        if (homeZone()):
+        if (aquaGPS.homeZone()):
             sleep(30)
             # this transition will fail if still moving
-            if not self.sleep():
+            if not self.slumber():
                 # continue monitoring
-                monitorSensors()
+                self.monitorSensors()
         # if not, begin a ride
         else:
             self.there()
@@ -52,40 +52,40 @@ class BicycleController(Machine):
     def collectData(self):
         print('beginning ride')
         # check darkness and adjust LEDs appropriately
-        if (isDark()):
-            lightsOn()
+        if (darknessSensor.isDark()):
+            illuminator.lightsOn()
         else:
-            lightsOff()
+            illuminator.lightsOff()
         # check previous state - if commute, make new data file
         if (self.previous == commute):
-            self.accelFileName = makeFileName('accel')
-            self.gpsFileName = makeFileName('gps')
+            self.accelFileName = misc.makeFileName('accel')
+            self.gpsFileName = misc.makeFileName('gps')
         # otherwise, use the one that already exists
         else:
-            writeToFile(self.accelFileName, self.accelDataBuffer)
+            misc.writeToFile(self.accelFileName, self.accelDataBuffer)
             self.accelDataBuffer = ''
         # main data collection: accelerometer
         for reading in range(accelReadsBetweenGPS):
             # get accelerometer data and store in file
             (x,y,z,temp) = accel.read_xyz()
-            t = makeTimeStamp()
+            t = misc.makeTimeStamp()
             accelData = '%s\t%s\t%s\t%s\n' % (t, x, y, z)
-            writeToFile(self.accelFileName, accelData)
+            misc.writeToFile(self.accelFileName, accelData)
             # sleep
             sleep(timeBetweenAccelReads)
         # location check
         # get GPS coordinates
-        (lat,lon) = getCoord()
-        t = makeTimeStamp()
+        (lat,lon) = aquaGPS.getCoord()
+        t = misc.makeTimeStamp()
         # log GPS data
         gpsData = '%s\t%s\t%s\n' % (t, lat, lon)
-        writeToFile(self.gpsFileName, gpsData)
+        misc.writeToFile(self.gpsFileName, gpsData)
         # check if we are home - if so, transition to commute
-        if (homeZone()):
+        if (aquaGPS.homeZone()):
             self.back_again()
         # if not, continue to log data
         else:
-            collectData()
+            self.collectData()
 
     # on_exit callback for all states: sets the previous state to the
     # current one as we leave it
@@ -96,7 +96,7 @@ class BicycleController(Machine):
     # CONDITONS
     # condition for commute -> nap transition
     def notMoving(self):
-        return False
+        return True
 
     # STATES
     nap = {'name':'nap', 'on_enter':['housekeep'], 'on_exit':['setPrevious']}
@@ -115,14 +115,6 @@ class BicycleController(Machine):
         self.accelDataBuffer = ''
 
         self.add_transition('awaken', 'nap', 'commute')
-        self.add_transition('sleep', 'commute', 'nap', conditions=['notMoving'])
+        self.add_transition('slumber', 'commute', 'nap', conditions=['notMoving'])
         self.add_transition('there', 'commute', 'ride')
         self.add_transition('back_again', 'ride', 'commute')
-
-testController = BicycleController()
-
-testController.state
-testController.awaken()
-testController.state
-testController.sleep()
-testController.state
