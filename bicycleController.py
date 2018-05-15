@@ -37,9 +37,9 @@ class BicycleController(Machine):
         # location check
         # get GPS coordinates
         if aquaGPS.checkForFix():
-            (lat,lon) = aquaGPS.getCoord()
+            (self.lat,self.lon) = aquaGPS.getCoord()
             # check if we are home - if not, begin ride
-            if not (aquaGPS.homeZone(lat,lon)):
+            if not (aquaGPS.homeZone(self.lat,self.lon)):
                 self.there()
         time.sleep(BicycleController.timeBetweenGPSReads)
         # if we couldn't get a fix, or are still home, try to nap after 30s
@@ -82,13 +82,13 @@ class BicycleController(Machine):
         # get GPS coordinates
         # if we can't get a fix, it will use the last one
         if aquaGPS.checkForFix():
-            (lat,lon) = aquaGPS.getCoord()
+            (self.lat,self.lon) = aquaGPS.getCoord()
             t = misc.makeTimeStamp()
             # log GPS data
-            gpsData = '%s\t%s\t%s\n' % (t, lat, lon)
+            gpsData = '%s\t%s\t%s\n' % (t, self.lat, self.lon)
             misc.writeToFile(self.gpsFileName, gpsData)
         # check if we are home - if so, transition to commute
-        if (aquaGPS.homeZone(lat,lon)):
+        if (aquaGPS.homeZone(self.lat,self.lon)):
             self.back_again()
         # if not, continue to log data
         else:
@@ -120,6 +120,9 @@ class BicycleController(Machine):
         self.accelFileName = ''
         self.gpsFileName = ''
         self.accelDataBuffer = ''
+
+        self.lat = 1.0
+        self.lon = 1.0
 
         self.add_transition('awaken', 'nap', 'commute')
         self.add_transition('slumber', 'commute', 'nap', conditions=['notMoving'])
