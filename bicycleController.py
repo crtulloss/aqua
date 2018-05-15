@@ -36,16 +36,16 @@ class BicycleController(Machine):
             illuminator.lightsOff()
         # location check
         # get GPS coordinates
-	if aquaGPS.checkForFix():
-	        (lat,lon) = aquaGPS.getCoord()
-        	# check if we are home - if not, begin ride
-        	if not (aquaGPS.homeZone(lat,lon)):
-            		self.there()
-	# if we couldn't get a fix, or are still home, try to nap
-	# this transition will fail if still moving
-	if not self.slumber():
-		# continue monitoring
-                self.monitorSensors()
+        if aquaGPS.checkForFix():
+            (lat,lon) = aquaGPS.getCoord()
+            # check if we are home - if not, begin ride
+            if not (aquaGPS.homeZone(lat,lon)):
+                self.there()
+        # if we couldn't get a fix, or are still home, try to nap
+        # this transition will fail if still moving
+        if not self.slumber():
+            # continue monitoring
+            self.monitorSensors()
 
     # on_enter callback for ride
     def collectData(self):
@@ -74,19 +74,19 @@ class BicycleController(Machine):
             sleep(timeBetweenAccelReads)
         # location check
         # get GPS coordinates
-	# if we can't get a fix, it will use the last one
-	if aquaGPS.checkForFix():
-        	(lat,lon) = aquaGPS.getCoord()
-        	t = misc.makeTimeStamp()
-        	# log GPS data
-        	gpsData = '%s\t%s\t%s\n' % (t, lat, lon)
-        	misc.writeToFile(self.gpsFileName, gpsData)
-        # check if we are home - if so, transition to commute
-        if (aquaGPS.homeZone(lat,lon)):
-            self.back_again()
-        # if not, continue to log data
-        else:
-            self.collectData()
+    	# if we can't get a fix, it will use the last one
+    	if aquaGPS.checkForFix():
+            (lat,lon) = aquaGPS.getCoord()
+            t = misc.makeTimeStamp()
+            # log GPS data
+            gpsData = '%s\t%s\t%s\n' % (t, lat, lon)
+            misc.writeToFile(self.gpsFileName, gpsData)
+            # check if we are home - if so, transition to commute
+            if (aquaGPS.homeZone(lat,lon)):
+                self.back_again()
+            # if not, continue to log data
+            else:
+                self.collectData()
 
     # on_exit callback for all states: sets the previous state to the
     # current one as we leave it
