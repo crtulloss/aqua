@@ -16,7 +16,7 @@ class BicycleController(Machine):
 
     timeBetweenGPSReads = 30
     timeBetweenAccelReads = 5
-    accelReadsBetweenGPS = timeBetweenGPSReads / timeBetweenAccelReads
+    accelReadsBetweenGPS = int(timeBetweenGPSReads / timeBetweenAccelReads)
 
     # STATE CALLBACKS
     # on_enter callback for nap
@@ -84,12 +84,12 @@ class BicycleController(Machine):
             # log GPS data
             gpsData = '%s\t%s\t%s\n' % (t, lat, lon)
             misc.writeToFile(self.gpsFileName, gpsData)
-            # check if we are home - if so, transition to commute
-            if (aquaGPS.homeZone(lat,lon)):
-                self.back_again()
-            # if not, continue to log data
-            else:
-                self.collectData()
+        # check if we are home - if so, transition to commute
+        if (aquaGPS.homeZone(lat,lon)):
+            self.back_again()
+        # if not, continue to log data
+        else:
+            self.collectData()
 
     # on_exit callback for all states: sets the previous state to the
     # current one as we leave it
