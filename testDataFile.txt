@@ -1,0 +1,2 @@
+time1	data1	data2
+time2	data3	data4

@@ -9,7 +9,7 @@ import time
 import aquaGPS
 import darknessSensor
 import illuminator
-import misc
+import dataLogger
 
 # Controller class, which inherits the Machine class
 class BicycleController(Machine):
@@ -24,7 +24,7 @@ class BicycleController(Machine):
         print('housekeeping')
         illuminator.lightsOff()
         #turnGPSOff()
-        misc.checkWiFi()
+        dataLogger.uploadData(self)
 
     # on_enter callback for commute
     # also called by aqua when we are in the commute state
@@ -55,23 +55,24 @@ class BicycleController(Machine):
         # check previous state - if commute, make new data file
         if (self.previous == 'commute'):
             print('creating new data files')
-            self.accelFileName = misc.makeFileName('accel')
-            self.gpsFileName = misc.makeFileName('gps')
+            self.accelFileName = dataLogger.makeFileName('accel')
+            self.gpsFileName = dataLogger.makeFileName('gps')
+            self.freshData = True
             # so that we don't accidentally create new files again
             self.previous = 'ride'
         # otherwise, use the one that already exists
         else:
             print('using existing data files')
-            misc.writeToFile(self.accelFileName, self.accelDataBuffer)
+            dataLogger.writeToFile(self.accelFileName, self.accelDataBuffer)
             self.accelDataBuffer = ''
         # main data collection: accelerometer
         for reading in range(BicycleController.accelReadsBetweenGPS):
             # get accelerometer data and store in file
             #(x,y,z,temp) = accel.read_xyz()
             (x,y,z) = self.accel.readXYZ()
-            t = misc.makeTimeStamp()
+            t = dataLogger.makeTimeStamp()
             accelData = '%s\t%s\t%s\t%s\n' % (t, x, y, z)
-            misc.writeToFile(self.accelFileName, accelData)
+            dataLogger.writeToFile(self.accelFileName, accelData)
             # sleep
             time.sleep(BicycleController.timeBetweenAccelReads)
         # location check
@@ -79,10 +80,10 @@ class BicycleController(Machine):
         # if we can't get a fix, it will use the last one
         if aquaGPS.checkForFix():
             (self.lat,self.lon) = aquaGPS.getCoord()
-            t = misc.makeTimeStamp()
+            t = dataLogger.makeTimeStamp()
             # log GPS data
             gpsData = '%s\t%s\t%s\n' % (t, self.lat, self.lon)
-            misc.writeToFile(self.gpsFileName, gpsData)
+            dataLogger.writeToFile(self.gpsFileName, gpsData)
         # check if we are home - if so, transition to commute
         if (aquaGPS.homeZone(self.lat,self.lon)):
             self.back_again()
@@ -116,6 +117,8 @@ class BicycleController(Machine):
         self.lon = 1.0
 
         self.accel = acc
+
+        self.freshData = False
 
         self.add_transition('awaken', 'nap', 'commute')
         self.add_transition('slumber', 'commute', 'nap')

@@ -20,11 +20,7 @@ from accelSensor import AccelSensor
 import aquaGPS
 import darknessSensor
 import illuminator
-import misc
-
-# data logging spreadsheet settings
-publicURL = 'https://script.google.com/macros/s/AKfycbxKm2AWyX6unin8LXDkbL7l1SUre2bDJNTTGUyMk9VhXmJRgMs/exec'
-sheetName = 'aqua state machine tests'
+import dataLogger
 
 # daemons need to rest
 lurkDowntime = 30
