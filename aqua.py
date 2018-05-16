@@ -52,6 +52,7 @@ def actDetected(pin):
     print('activity detected!')
     if (aqC.state == 'nap'):
         aqC.awaken()
+        lurk()
 
 def inactDetected(pin):
     print('inactivity detected!')
@@ -63,7 +64,7 @@ GPIO.add_event_detect(inactPin, GPIO.RISING, inactDetected)
 print('GPIO interrupts ready')
 time.sleep(5)
 print('clearing accel status register')
-print(adxl.clearInterrupts())
+adxl.clearInterrupts()
 
 # lurk patiently in the background, forever....
 while True:
