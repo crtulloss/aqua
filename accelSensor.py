@@ -39,6 +39,7 @@ REG_POWER_CTL = 0x2D
 VAL_MEAS_NORM = 0x02
 VAL_MEAS_AUTOSLEEP = 0x04
 VAL_ACTINACT_LOOP = 0x3F
+VAL_ACTINACT_DEFAULT = 0x0F
 VAL_INT_ACT = 0x10
 VAL_INT_INACT = 0x20
 VAL_INT_AWAKE = 0x40
@@ -123,7 +124,7 @@ class AccelSensor(object):
     # power control
     def setupInterrupts(self):
         # set activity and inactivity thresholds, times, loop mode, and reference mode (not absolute)
-        interruptSettings = [activityThreshLow, activityThreshHigh, actNumSamples, inactivityThreshLow, inactivityThreshHigh, inactNumSamplesLow, inactNumSamplesHigh, VAL_ACTINACT_LOOP]
+        interruptSettings = [activityThreshLow, activityThreshHigh, actNumSamples, inactivityThreshLow, inactivityThreshHigh, inactNumSamplesLow, inactNumSamplesHigh, VAL_ACTINACT_DEFAULT]
         print(interruptSettings)
         self.spiWrite(REG_THRESH_ACT_L, interruptSettings)
         print(self.spiRead(REG_THRESH_ACT_L, 8))
@@ -131,7 +132,7 @@ class AccelSensor(object):
         self.spiWrite(REG_INTMAP1, [VAL_INT_ACT, VAL_INT_INACT])
         print(self.spiRead(REG_INTMAP1, 2))
         # go into autosleep mode
-        self.spiWrite(REG_POWER_CTL, [VAL_MEAS_AUTOSLEEP])
+        self.spiWrite(REG_POWER_CTL, [VAL_MEAS_NORM])
         print(self.spiRead(REG_POWER_CTL, 1))
 
     def readStatusReg(self):
