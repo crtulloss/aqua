@@ -94,8 +94,8 @@ class AccelSensor(object):
         self.lsbToMPS = 0.0098
 
         # make sure the device reset properly
-        if not (spiRead(REG_STATUS), 1) == 0x40:
+        if not (self.spiRead(REG_STATUS), 1) == 0x40:
             print('ADXL362 did not start up correctly')
 
         # start measurement mode
-        spiWrite(REG_POWER_CTL, [VAL_MEAS_NORM])
+        self.spiWrite(REG_POWER_CTL, [VAL_MEAS_NORM])
