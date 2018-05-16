@@ -41,16 +41,25 @@ adxl = AccelSensor()
 aqC = BicycleController(adxl)
 print(aqC.state)
 
+# lurk patiently in the background, forever....
+def lurk():
+    if (aqC.state == 'nap'):
+        time.sleep(100000000)
+    elif (aqC.state == 'commute'):
+        aqC.monitorSensors()
+
 # setup accelerometer interrupts - state machine transitions
 def actDetected(pin):
     print('activity detected!')
     if (aqC.state == 'nap'):
         aqC.awaken()
+        lurk()
 
 def inactDetected(pin):
     print('inactivity detected!')
     if (aqC.state == 'commute'):
         aqC.slumber()
+        lurk()
 
 GPIO.add_event_detect(actPin, GPIO.RISING, actDetected)
 GPIO.add_event_detect(inactPin, GPIO.RISING, inactDetected)
@@ -59,11 +68,6 @@ time.sleep(5)
 print('clearing status register')
 print(adxl.clearInterrupts())
 
-# lurk patiently in the background, forever....
-while True:
-    print('lurking')
-    print(aqC.state)
-    if (aqC.state == 'nap'):
-        time.sleep(100000000)
-    elif (aqC.state == 'commute'):
-        aqC.monitorSensors()
+# start lurking at first
+# each interrupt also ends in a lurk
+lurk()
