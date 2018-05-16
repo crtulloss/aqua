@@ -29,20 +29,20 @@ class BicycleController(Machine):
     # on_enter callback for commute
     def monitorSensors(self):
         print('monitoring sensors')
-        while True:
-            # check darkness and adjust LEDs appropriately
-            if (darknessSensor.isDark()):
-                illuminator.lightsOn()
-            else:
-                illuminator.lightsOff()
-            # location check
-            # get GPS coordinates
-            if aquaGPS.checkForFix():
-                (self.lat,self.lon) = aquaGPS.getCoord()
-                # check if we are home - if not, begin ride
-                if not (aquaGPS.homeZone(self.lat,self.lon)):
-                    self.there()
-            time.sleep(BicycleController.timeBetweenGPSReads)
+        #while True:
+        # check darkness and adjust LEDs appropriately
+        if (darknessSensor.isDark()):
+            illuminator.lightsOn()
+        else:
+            illuminator.lightsOff()
+        # location check
+        # get GPS coordinates
+        if aquaGPS.checkForFix():
+            (self.lat,self.lon) = aquaGPS.getCoord()
+            # check if we are home - if not, begin ride
+            if not (aquaGPS.homeZone(self.lat,self.lon)):
+                self.there()
+        time.sleep(BicycleController.timeBetweenGPSReads)
 
     # on_enter callback for ride
     def collectData(self):
