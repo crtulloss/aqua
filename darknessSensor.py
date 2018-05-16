@@ -13,7 +13,7 @@ import tsl2591
 from time import sleep
 
 # darkness threshold
-darknessThreshold = 50.0
+darknessThreshold = 16.0
 
 # create the dude
 aquaTSL2591 = tsl2591.Tsl2591()

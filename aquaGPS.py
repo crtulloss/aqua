@@ -14,8 +14,7 @@ gpsPowerCheck = "AT+CGNSPWR?\r"
 gpsPowerOn = "AT+CGNSPWR=1\r"
 gpsPowerOff = "AT+CGNSPWR=0\r"
 
-homeNorth = 41.8226		# test
-#homeNorth = 41.8357		# olney street
+homeNorth = 41.8357		# olney street
 homeSouth = 41.8226		# williams street
 
 homeEast = -71.3904		# gano street
