@@ -75,8 +75,6 @@ if (inactNumSamples > 0xFFFF):
 inactNumSamplesHigh = (inactNumSamples & 0xFF00) >> 8
 inactNumSamplesLow = inactNumSamples & 0x00FF
 
-inactNumSamples = 1
-actNumSamples = 1
 # ADXL362 class, which is used to send SPI commands to the ADXL362 chip
 class AccelSensor(object):
 
@@ -124,7 +122,7 @@ class AccelSensor(object):
     # power control
     def setupInterrupts(self):
         # set activity and inactivity thresholds, times, loop mode, and reference mode (not absolute)
-        interruptSettings = [activityThreshLow, activityThreshHigh, actNumSamples, inactivityThreshLow, inactivityThreshHigh, inactNumSamplesLow, inactNumSamplesHigh, VAL_ACTINACT_DEFAULT]
+        interruptSettings = [activityThreshLow, activityThreshHigh, actNumSamples, inactivityThreshLow, inactivityThreshHigh, inactNumSamplesLow, inactNumSamplesHigh, VAL_ACTINACT_LOOP]
         print(interruptSettings)
         self.spiWrite(REG_THRESH_ACT_L, interruptSettings)
         print(self.spiRead(REG_THRESH_ACT_L, 8))
