@@ -63,7 +63,7 @@ inactivityThreshLow = int(inactivityThreshBytes) & 0x00FF
 actTime = 0.5
 inactTime = 60.0
 # default data rate
-odr = 100
+odr = 100.0
 actNumSamples = int(actTime * odr)
 if (actNumSamples > 0xFF):
     actNumSample = 0xFF
@@ -125,7 +125,7 @@ class AccelSensor(object):
         interruptSettings = [activityThreshLow, activityThreshHigh, actNumSamples, inactivityThreshLow, inactivityThreshHigh, inactNumSamplesLow, inactNumSamplesHigh, VAL_ACTINACT_LOOP]
         print(interruptSettings)
         self.spiWrite(REG_THRESH_ACT_L, interruptSettings)
-        print(self.spiRead(REG_THRESH_ACT_L, 7))
+        print(self.spiRead(REG_THRESH_ACT_L, 8))
         # map the ACT -> INT1, INACT -> INT2
         self.spiWrite(REG_INTMAP1, [VAL_INT_ACT, VAL_INT_INACT])
         print(self.spiRead(REG_INTMAP1, 2))
