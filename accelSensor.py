@@ -42,26 +42,6 @@ VAL_MEAS_NORM = 0x02
 # ADXL362 class, which is used to send SPI commands to the ADXL362 chip
 class AccelSensor(object):
 
-    def __init__(self):
-        # set up SPI
-        self.spi = spidev.SpiDev()
-        self.spi.open(0,0)
-        # CPHA = CPOL = 0
-        self.spi.mode = 0b00
-        # recommended speeds 1MHz - 8MHz
-        self.spi.max_speed_hz = 1000000
-
-        self.numDataBits = 12
-
-        self.lsbToMPS = 0.0098
-
-        # make sure the device reset properly
-        if not (spiRead(REG_STATUS), 1) == 0x40:
-            print('ADXL362 did not start up correctly')
-
-        # start measurement mode
-        spiWrite(REG_POWER_CTL, [VAL_MEAS_NORM])
-
     # read some number of bytes starting at the specified register
     def spiRead(firstAddress, numBytes):
         bytesToTransfer = [COMMAND_READ, firstAddress]
@@ -99,3 +79,23 @@ class AccelSensor(object):
     def twosComp(num, numBits):
         msb = num & (1 << (numBits-1))
         return num - (2 * msb)
+
+    def __init__(self):
+        # set up SPI
+        self.spi = spidev.SpiDev()
+        self.spi.open(0,0)
+        # CPHA = CPOL = 0
+        self.spi.mode = 0b00
+        # recommended speeds 1MHz - 8MHz
+        self.spi.max_speed_hz = 1000000
+
+        self.numDataBits = 12
+
+        self.lsbToMPS = 0.0098
+
+        # make sure the device reset properly
+        if not (spiRead(REG_STATUS), 1) == 0x40:
+            print('ADXL362 did not start up correctly')
+
+        # start measurement mode
+        spiWrite(REG_POWER_CTL, [VAL_MEAS_NORM])
