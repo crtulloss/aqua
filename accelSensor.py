@@ -49,7 +49,7 @@ numDataBits = 16
 lsbToMPSS = 0.0098
 
 # activity and inactivity thresholds in m/s^2
-activityThresh = 1.0
+activityThresh = 0.1
 activityThreshBytes = activityThresh / lsbToMPSS
 int(activityThreshBytes)
 activityThreshHigh = int(activityThreshBytes) & 0xFF00
@@ -124,6 +124,9 @@ class AccelSensor(object):
         self.spiWrite(REG_POWER_CTL, [VAL_MEAS_AUTOSLEEP])
         print(self.spiRead(REG_POWER_CTL, 1))
 
+    def readStatusReg(self):
+        return self.spiRead(REG_STATUS, 1)
+
     def __init__(self):
         print('setting up accelerometer SPI')
         # set up SPI
@@ -147,3 +150,6 @@ adxl = AccelSensor()
 
 def getXYZData():
     return adxl.readXYZ()
+
+def clearInterrupts():
+    return adxl.readStatusReg()
