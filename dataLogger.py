@@ -58,5 +58,3 @@ def uploadData(controllerInstance):
                 time.sleep(wifiCheckTime)
     else:
         print('no data to log!')
-
-uploadData('a')
