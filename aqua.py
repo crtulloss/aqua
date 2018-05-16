@@ -40,26 +40,23 @@ adxl = AccelSensor()
 # setup controller
 aqC = BicycleController(adxl)
 
-# lurk patiently in the background, forever....
+# the normal behavior of a daemon is to lurk
 def lurk():
-    while True:
-        if (aqC.state == 'nap'):
-            time.sleep(100000000)
-        elif (aqC.state == 'commute'):
-            aqC.monitorSensors()
+    if (aqC.state == 'nap'):
+        time.sleep(100000000)
+    elif (aqC.state == 'commute'):
+        aqC.monitorSensors()
 
 # setup accelerometer interrupts - state machine transitions
 def actDetected(pin):
     print('activity detected!')
     if (aqC.state == 'nap'):
         aqC.awaken()
-        lurk()
 
 def inactDetected(pin):
     print('inactivity detected!')
     if (aqC.state == 'commute'):
         aqC.slumber()
-        lurk()
 
 GPIO.add_event_detect(actPin, GPIO.RISING, actDetected)
 GPIO.add_event_detect(inactPin, GPIO.RISING, inactDetected)
@@ -68,6 +65,6 @@ time.sleep(5)
 print('clearing accel status register')
 print(adxl.clearInterrupts())
 
-# start lurking at first
-# each interrupt also ends in a lurk
-lurk()
+# lurk patiently in the background, forever....
+while True:
+    lurk()
