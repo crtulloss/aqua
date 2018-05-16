@@ -10,7 +10,6 @@
 
 import spidev
 import time
-import binascii
 
 # commands
 COMMAND_WRITE = 0x0A
@@ -38,7 +37,41 @@ REG_POWER_CTL = 0x2D
 
 # values for register writes
 VAL_MEAS_NORM = 0x02
+VAL_MEAS_AUTOSLEEP = 0x06
+VAL_ACTINACT_LOOP = 0x3F
+VAL_INT_ACT = 0x10
+VAL_INT_INACT = 0x20
 
+# these data are 12-bit but twos-complement uses sign extension
+# so for all intents and purposes it is 16-bit
+numDataBits = 16
+
+lsbToMPSS = 0.0098
+
+# activity and inactivity thresholds in m/s^2
+activityThresh = 1.0
+activityThreshBytes = activityThresh / lsbToMPSS
+int(activityThreshBytes)
+activityThreshHigh = int(activityThreshBytes) & 0xFF00
+activityThreshLow = int(activityThreshBytes) & 0x00FF
+
+inactivityThesh = 0.1
+inactivityThreshBytes = inactivityThresh / lsbToMPSS
+int(inactivityThreshBytes)
+inactivityThreshHigh = int(inactivityThreshBytes) & 0xFF00
+inactivityThreshLow = int(inactivityThreshBytes) & 0x00FF
+
+# activity and inactivity times
+actTime = 1.0
+inactTime = 60.0
+# default data rate
+odr = 100
+actNumSamples = int(actTime * odr)
+if (actNumSamples > 0xFF):
+    actNumSample = 0xFF
+inactNumSamples = int(inactTime * odr)
+if (inactNumSamples > 0xFF):
+    inactNumSample = 0xFF
 # ADXL362 class, which is used to send SPI commands to the ADXL362 chip
 class AccelSensor(object):
 
@@ -65,13 +98,13 @@ class AccelSensor(object):
         yBits = (data[2] + (data[3] << 8))
         zBits = (data[4] + (data[5] << 8))
 
-        xTwos = self.twosComp(xBits, self.numDataBits)
-        yTwos = self.twosComp(yBits, self.numDataBits)
-        zTwos = self.twosComp(zBits, self.numDataBits)
+        xTwos = self.twosComp(xBits, numDataBits)
+        yTwos = self.twosComp(yBits, numDataBits)
+        zTwos = self.twosComp(zBits, numDataBits)
 
-        xVal = self.lsbToMPS * float(xTwos)
-        yVal = self.lsbToMPS * float(yTwos)
-        zVal = self.lsbToMPS * float(zTwos)
+        xVal = lsbToMPSS * float(xTwos)
+        yVal = lsbToMPSS * float(yTwos)
+        zVal = lsbToMPSS * float(zTwos)
 
         return (xVal, yVal, zVal)
 
@@ -80,7 +113,16 @@ class AccelSensor(object):
         msb = num & (1 << (numBits-1))
         return num - (2 * msb)
 
+    def setupInterrupts(self):
+        # set activity and inactivity thresholds, times, loop mode, and reference mode (not absolute)
+        self.spiWrite(REG_THRESH_ACT_L, [activityThreshLow, activityThreshHigh, actNumSamples, inactivityThreshLow, inactivityThreshHigh, inactNumSamples, VAL_ACTINACT_LOOP])
+        # map the ACT -> INT1, INACT -> INT2
+        self.spiWrite(REG_INTMAP1, [VAL_INT_ACT, VAL_INT_INACT])
+        # go into autosleep mode
+        self.spiWrite(REG_POWER_CTL, [VAL_MEAS_AUTOSLEEP])
+
     def __init__(self):
+        print('setting up accelerometer SPI')
         # set up SPI
         self.spi = spidev.SpiDev()
         self.spi.open(0,0)
@@ -89,20 +131,16 @@ class AccelSensor(object):
         # recommended speeds 1MHz - 8MHz
         self.spi.max_speed_hz = 1000000
 
-        # these data are 12-bit but twos-complement uses sign extension
-        # so for all intents and purposes it is 16-bit
-        self.numDataBits = 16
-
-        self.lsbToMPS = 0.0098
-
-        # make sure the device reset properly
-        if not (self.spiRead(REG_STATUS, 1) == 0x40):
-            print('ADXL362 did not start up correctly')
-
         # start measurement mode
+        print('beginning accel measurement mode')
         self.spiWrite(REG_POWER_CTL, [VAL_MEAS_NORM])
 
+        # setup interrupts
+        print('setting up accel interrupts')
+        self.setupInterrupts()
+
+# the actual instance used for state machine transitions and data collection
 adxl = AccelSensor()
-while True:
-    print(adxl.readXYZ())
-    time.sleep(1)
+
+def getXYZData():
+    return adxl.readXYZ()

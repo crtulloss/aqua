@@ -8,6 +8,7 @@ from transitions import Machine
 import time
 import aquaGPS
 import darknessSensor
+import accelSensor
 import illuminator
 import misc
 
@@ -72,7 +73,7 @@ class BicycleController(Machine):
         for reading in range(BicycleController.accelReadsBetweenGPS):
             # get accelerometer data and store in file
             #(x,y,z,temp) = accel.read_xyz()
-            (x,y,z,temp) = (1,2,3,4)
+            (x,y,z) = accelSensor.getXYZDataXYZ()
             t = misc.makeTimeStamp()
             accelData = '%s\t%s\t%s\t%s\n' % (t, x, y, z)
             misc.writeToFile(self.accelFileName, accelData)
