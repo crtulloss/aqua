@@ -39,7 +39,6 @@ adxl = AccelSensor()
 
 # setup controller
 aqC = BicycleController(adxl)
-print(aqC.state)
 
 # lurk patiently in the background, forever....
 def lurk():
@@ -65,7 +64,7 @@ GPIO.add_event_detect(actPin, GPIO.RISING, actDetected)
 GPIO.add_event_detect(inactPin, GPIO.RISING, inactDetected)
 print('GPIO interrupts ready')
 time.sleep(5)
-print('clearing status register')
+print('clearing accel status register')
 print(adxl.clearInterrupts())
 
 # start lurking at first

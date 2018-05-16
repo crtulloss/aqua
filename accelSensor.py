@@ -124,15 +124,11 @@ class AccelSensor(object):
     def setupInterrupts(self):
         # set activity and inactivity thresholds, times, loop mode, and reference mode (not absolute)
         interruptSettings = [activityThreshLow, activityThreshHigh, actNumSamples, inactivityThreshLow, inactivityThreshHigh, inactNumSamplesLow, inactNumSamplesHigh, VAL_ACTINACT_LOOP]
-        print(interruptSettings)
         self.spiWrite(REG_THRESH_ACT_L, interruptSettings)
-        print(self.spiRead(REG_THRESH_ACT_L, 8))
         # map the ACT -> INT1, INACT -> INT2
         self.spiWrite(REG_INTMAP1, [VAL_INT_ACT, VAL_INT_INACT])
-        print(self.spiRead(REG_INTMAP1, 2))
         # go into autosleep mode
         self.spiWrite(REG_POWER_CTL, [VAL_MEAS_AUTOSLEEP])
-        print(self.spiRead(REG_POWER_CTL, 1))
 
     def clearInterrupts(self):
         return self.spiRead(REG_STATUS, 1)
@@ -147,7 +143,7 @@ class AccelSensor(object):
         # recommended speeds 1MHz - 8MHz
         self.spi.max_speed_hz = 1000000
         # soft reset
-        print('soft reset')
+        print('accel soft reset')
         self.spiWrite(REG_SOFT_RESET, [VAL_SOFT_RESET])
         time.sleep(0.5)
         # setup interrupts and mode
