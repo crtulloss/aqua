@@ -32,6 +32,7 @@ def uploadData(controllerInstance):
     fd = controllerInstance.freshData
     # if there is new data to log (i.e. we came back from a ride)
     if fd:
+        # get the file contents and split into rows
         gpsFile = open(gpsFileName, 'r')
         gpsContents = gpsFile.read()
         gpsRows = gpsContents.split('\n')
@@ -42,17 +43,24 @@ def uploadData(controllerInstance):
         while fd:
             try:
                 for row in gpsRows:
+                    # split each row by data point
                     rowEntries = row.split('\t')
-                    gpsData = {'sheet':sheetName+':GPS', 'Data Time':rowEntries[0], 'Latitude':rowEntries[1], 'Longitude':rowEntries[2]}
-                    requests.get(publicURL, params=gpsData)
+                    # make sure there are the correct number of entries
+                    if (len(rowEntries) == 3):
+                        # log the data
+                        gpsData = {'sheet':sheetName+':GPS', 'Data Time':rowEntries[0], 'Latitude':rowEntries[1], 'Longitude':rowEntries[2]}
+                        requests.get(publicURL, params=gpsData)
                 for row in accelRows:
                     rowEntries = row.split('\t')
-                    accelData = {'sheet':sheetName+':Accel', 'Data Time':rowEntries[0], 'X':rowEntries[1], 'Y':rowEntries[2], 'Z':rowEntries[3]}
-                    requests.get(publicURL, params=accelData)
+                    if (len(rowEntries) == 4):
+                        accelData = {'sheet':sheetName+':Accel', 'Data Time':rowEntries[0], 'X':rowEntries[1], 'Y':rowEntries[2], 'Z':rowEntries[3]}
+                        requests.get(publicURL, params=accelData)
+                # no more fresh data
                 fd = False
                 controllerInstance.freshData = False
                 print('data logged succesfully')
                 return True
+            # if no wifi, try again later
             except requests.exceptions.ConnectionError:
                 print('no WiFi right now')
                 time.sleep(wifiCheckTime)
