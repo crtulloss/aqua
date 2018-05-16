@@ -61,4 +61,7 @@ print(adxl.clearInterrupts())
 
 # lurk patiently in the background, forever....
 while True:
-    time.sleep(100000000)
+    if (aqC.state == 'nap'):
+        time.sleep(100000000)
+    elif (aqC.state == 'commute'):
+        aqC.monitorSensors()

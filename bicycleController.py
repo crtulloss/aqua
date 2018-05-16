@@ -27,6 +27,7 @@ class BicycleController(Machine):
         misc.checkWiFi()
 
     # on_enter callback for commute
+    # also called by aqua when we are in the commute state
     def monitorSensors(self):
         print('monitoring sensors')
         #while True:
@@ -42,6 +43,7 @@ class BicycleController(Machine):
             # check if we are home - if not, begin ride
             if not (aquaGPS.homeZone(self.lat,self.lon)):
                 self.there()
+        print('waiting %d seconds' % BicycleController.timeBetweenGPSReads)
         time.sleep(BicycleController.timeBetweenGPSReads)
 
     # on_enter callback for ride
