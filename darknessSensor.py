@@ -10,7 +10,6 @@
 # RPi
 # also note that it won't work on a PC because we don't have access to smbus
 import tsl2591
-from time import sleep
 
 # darkness threshold
 darknessThreshold = 16.0

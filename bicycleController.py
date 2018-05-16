@@ -8,7 +8,6 @@ from transitions import Machine
 import time
 import aquaGPS
 import darknessSensor
-import accelSensor
 import illuminator
 import misc
 
@@ -30,24 +29,20 @@ class BicycleController(Machine):
     # on_enter callback for commute
     def monitorSensors(self):
         print('monitoring sensors')
-        # check darkness and adjust LEDs appropriately
-        if (darknessSensor.isDark()):
-            illuminator.lightsOn()
-        else:
-            illuminator.lightsOff()
-        # location check
-        # get GPS coordinates
-        if aquaGPS.checkForFix():
-            (self.lat,self.lon) = aquaGPS.getCoord()
-            # check if we are home - if not, begin ride
-            if not (aquaGPS.homeZone(self.lat,self.lon)):
-                self.there()
-        time.sleep(BicycleController.timeBetweenGPSReads)
-        # if we couldn't get a fix, or are still home, try to nap after 30s
-        # this transition will fail if still moving
-        if not self.slumber():
-            # continue monitoring
-            self.monitorSensors()
+            while True:
+            # check darkness and adjust LEDs appropriately
+            if (darknessSensor.isDark()):
+                illuminator.lightsOn()
+            else:
+                illuminator.lightsOff()
+            # location check
+            # get GPS coordinates
+            if aquaGPS.checkForFix():
+                (self.lat,self.lon) = aquaGPS.getCoord()
+                # check if we are home - if not, begin ride
+                if not (aquaGPS.homeZone(self.lat,self.lon)):
+                    self.there()
+            time.sleep(BicycleController.timeBetweenGPSReads)
 
     # on_enter callback for ride
     def collectData(self):
@@ -73,7 +68,7 @@ class BicycleController(Machine):
         for reading in range(BicycleController.accelReadsBetweenGPS):
             # get accelerometer data and store in file
             #(x,y,z,temp) = accel.read_xyz()
-            (x,y,z) = accelSensor.getXYZDataXYZ()
+            (x,y,z) = self.accel.readXYZ()
             t = misc.makeTimeStamp()
             accelData = '%s\t%s\t%s\t%s\n' % (t, x, y, z)
             misc.writeToFile(self.accelFileName, accelData)
@@ -101,11 +96,6 @@ class BicycleController(Machine):
         self.previous = self.state
         return self.previous
 
-    # CONDITONS
-    # condition for commute -> nap transition
-    def notMoving(self):
-        return False
-
     # STATES
     nap = {'name':'nap', 'on_enter':['housekeep'], 'on_exit':['setPrevious']}
     commute = {'name':'commute', 'on_enter':['monitorSensors'], 'on_exit':['setPrevious']}
@@ -113,7 +103,7 @@ class BicycleController(Machine):
 
     states = [nap, commute, ride]
 
-    def __init__(self):
+    def __init__(self, acc):
 
         Machine.__init__(self, states=BicycleController.states, initial='nap')
 
@@ -125,7 +115,9 @@ class BicycleController(Machine):
         self.lat = 1.0
         self.lon = 1.0
 
+        self.accel = acc
+
         self.add_transition('awaken', 'nap', 'commute')
-        self.add_transition('slumber', 'commute', 'nap', conditions=['notMoving'])
+        self.add_transition('slumber', 'commute', 'nap')
         self.add_transition('there', 'commute', 'ride')
         self.add_transition('back_again', 'ride', 'commute')

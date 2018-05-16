@@ -134,7 +134,7 @@ class AccelSensor(object):
         self.spiWrite(REG_POWER_CTL, [VAL_MEAS_AUTOSLEEP])
         print(self.spiRead(REG_POWER_CTL, 1))
 
-    def readStatusReg(self):
+    def clearInterrupts(self):
         return self.spiRead(REG_STATUS, 1)
 
     def __init__(self):
@@ -153,12 +153,3 @@ class AccelSensor(object):
         # setup interrupts and mode
         print('setting up accel interrupts')
         self.setupInterrupts()
-
-# the actual instance used for state machine transitions and data collection
-adxl = AccelSensor()
-
-def getXYZData():
-    return adxl.readXYZ()
-
-def clearInterrupts():
-    return adxl.readStatusReg()
