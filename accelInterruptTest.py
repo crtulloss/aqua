@@ -6,6 +6,7 @@
 
 import accelSensor
 import RPi.GPIO as GPIO
+import time
 
 # mode: pin number
 GPIO.setmode(GPIO.BOARD)
