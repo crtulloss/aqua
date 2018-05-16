@@ -128,7 +128,7 @@ class AccelSensor(object):
         self.spiWrite(REG_THRESH_ACT_L, interruptSettings)
         print(self.spiRead(REG_THRESH_ACT_L, 8))
         # map the ACT -> INT1, INACT -> INT2
-        self.spiWrite(REG_INTMAP1, [VAL_INT_AWAKE, VAL_INT_INACT])
+        self.spiWrite(REG_INTMAP1, [VAL_INT_ACT, VAL_INT_INACT])
         print(self.spiRead(REG_INTMAP1, 2))
         # go into autosleep mode
         self.spiWrite(REG_POWER_CTL, [VAL_MEAS_AUTOSLEEP])
