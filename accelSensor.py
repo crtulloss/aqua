@@ -149,6 +149,7 @@ class AccelSensor(object):
         # soft reset
         print('soft reset')
         self.spiWrite(REG_SOFT_RESET, [VAL_SOFT_RESET])
+        time.sleep(0.5)
         # setup interrupts and mode
         print('setting up accel interrupts')
         self.setupInterrupts()
