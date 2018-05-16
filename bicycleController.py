@@ -29,7 +29,7 @@ class BicycleController(Machine):
     # on_enter callback for commute
     def monitorSensors(self):
         print('monitoring sensors')
-            while True:
+        while True:
             # check darkness and adjust LEDs appropriately
             if (darknessSensor.isDark()):
                 illuminator.lightsOn()
