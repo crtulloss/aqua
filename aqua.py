@@ -58,3 +58,7 @@ print('GPIO interrupts ready')
 time.sleep(5)
 print('clearing status register')
 print(adxl.clearInterrupts())
+
+# lurk patiently in the background, forever....
+while True:
+    time.sleep(100000000)
