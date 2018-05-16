@@ -41,6 +41,7 @@ VAL_MEAS_AUTOSLEEP = 0x04
 VAL_ACTINACT_LOOP = 0x3F
 VAL_INT_ACT = 0x10
 VAL_INT_INACT = 0x20
+VAL_INT_AWAKE = 0x40
 VAL_SOFT_RESET = 0x52
 
 # these data are 12-bit but twos-complement uses sign extension
@@ -127,7 +128,7 @@ class AccelSensor(object):
         self.spiWrite(REG_THRESH_ACT_L, interruptSettings)
         print(self.spiRead(REG_THRESH_ACT_L, 8))
         # map the ACT -> INT1, INACT -> INT2
-        self.spiWrite(REG_INTMAP1, [VAL_INT_ACT, VAL_INT_INACT])
+        self.spiWrite(REG_INTMAP1, [VAL_INT_AWAKE, VAL_INT_INACT])
         print(self.spiRead(REG_INTMAP1, 2))
         # go into autosleep mode
         self.spiWrite(REG_POWER_CTL, [VAL_MEAS_AUTOSLEEP])
