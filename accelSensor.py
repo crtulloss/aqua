@@ -54,7 +54,7 @@ lsbToMPSS = 0.0098
 
 # activity and inactivity thresholds in mg - these are sample values
 # from datasheet
-activityThreshBytes = 1000
+activityThreshBytes = 250
 activityThreshHigh = (int(activityThreshBytes) & 0xFF00) >> 8
 activityThreshLow = int(activityThreshBytes) & 0x00FF
 
@@ -64,7 +64,7 @@ inactivityThreshLow = int(inactivityThreshBytes) & 0x00FF
 
 # activity and inactivity times
 actTime = 0.5
-inactTime = 10.0
+inactTime = 20.0
 # default data rate
 odr = 100.0
 actNumSamples = int(actTime * odr)
