@@ -51,7 +51,7 @@ class AccelSensor(object):
         # recommended speeds 1MHz - 8MHz
         self.spi.max_speed_hz = 1000000
 
-        self.self.numDataBits = 12
+        self.numDataBits = 12
 
         self.lsbToMPS = 0.0098
 
