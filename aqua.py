@@ -43,7 +43,7 @@ aqC = BicycleController(adxl)
 # the normal behavior of a daemon is to lurk
 def lurk():
     if (aqC.state == 'nap'):
-        time.sleep(100000000)
+        pass
     elif (aqC.state == 'commute'):
         aqC.monitorSensors()
 
