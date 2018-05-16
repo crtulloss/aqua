@@ -64,7 +64,7 @@ inactivityThreshLow = int(inactivityThreshBytes) & 0x00FF
 
 # activity and inactivity times
 actTime = 0.5
-inactTime = 60.0
+inactTime = 10.0
 # default data rate
 odr = 100.0
 actNumSamples = int(actTime * odr)
