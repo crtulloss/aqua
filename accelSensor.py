@@ -43,7 +43,7 @@ VAL_MEAS_NORM = 0x02
 class AccelSensor(object):
 
     # read some number of bytes starting at the specified register
-    def spiRead(firstAddress, numBytes):
+    def spiRead(self, firstAddress, numBytes):
         bytesToTransfer = [COMMAND_READ, firstAddress]
         for n in range(numBytes):
             bytesToTransfer.append(0x00)
@@ -51,7 +51,7 @@ class AccelSensor(object):
         return response[2:]
 
     # write some bytes starting at the specified register
-    def spiWrite(firstAddress, bytesToWrite):
+    def spiWrite(self, firstAddress, bytesToWrite):
         bytesToTransfer = [COMMAND_WRITE, firstAddress]
         for b in bytesToWrite:
             bytesToTransfer.append(b)
@@ -59,7 +59,7 @@ class AccelSensor(object):
         return response[2:]
 
     # read XYZ data
-    def readXYZ():
+    def readXYZ(self):
         data = spiRead(REG_X_L, 6)
         xBits = (data[0] + (data[1] << 8))
         yBits = (data[2] + (data[3] << 8))
@@ -76,7 +76,7 @@ class AccelSensor(object):
         return (xVal, yVal, zVal)
 
     # get the value represented by a twos-complement number
-    def twosComp(num, numBits):
+    def twosComp(self, num, numBits):
         msb = num & (1 << (numBits-1))
         return num - (2 * msb)
 
