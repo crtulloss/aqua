@@ -49,7 +49,7 @@ numDataBits = 16
 lsbToMPSS = 0.0098
 
 # activity and inactivity thresholds in m/s^2
-activityThresh = 0.1
+activityThresh = 0
 activityThreshBytes = activityThresh / lsbToMPSS
 int(activityThreshBytes)
 activityThreshHigh = int(activityThreshBytes) & 0xFF00
@@ -72,6 +72,9 @@ if (actNumSamples > 0xFF):
 inactNumSamples = int(inactTime * odr)
 if (inactNumSamples > 0xFF):
     inactNumSample = 0xFF
+
+inactNumSamples = 1
+actNumSamples = 1
 # ADXL362 class, which is used to send SPI commands to the ADXL362 chip
 class AccelSensor(object):
 
@@ -115,7 +118,7 @@ class AccelSensor(object):
 
     def setupInterrupts(self):
         # set activity and inactivity thresholds, times, loop mode, and reference mode (not absolute)
-        self.spiWrite(REG_THRESH_ACT_L, [activityThreshLow, activityThreshHigh, 1, inactivityThreshLow, inactivityThreshHigh, 1, VAL_ACTINACT_LOOP])
+        self.spiWrite(REG_THRESH_ACT_L, [activityThreshLow, activityThreshHigh, actNumSamples, inactivityThreshLow, inactivityThreshHigh, inactNumSamples, VAL_ACTINACT_LOOP])
         print(self.spiRead(REG_THRESH_ACT_L, 7))
         # map the ACT -> INT1, INACT -> INT2
         self.spiWrite(REG_INTMAP1, [VAL_INT_ACT, VAL_INT_INACT])
