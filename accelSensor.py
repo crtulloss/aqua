@@ -89,7 +89,9 @@ class AccelSensor(object):
         # recommended speeds 1MHz - 8MHz
         self.spi.max_speed_hz = 1000000
 
-        self.numDataBits = 12
+        # these data are 12-bit but twos-complement uses sign extension
+        # so for all intents and purposes it is 16-bit
+        self.numDataBits = 16
 
         self.lsbToMPS = 0.0098
 
@@ -99,3 +101,8 @@ class AccelSensor(object):
 
         # start measurement mode
         self.spiWrite(REG_POWER_CTL, [VAL_MEAS_NORM])
+
+adxl = AccelSensor()
+while True:
+    adxl.readXYZ()
+    time.sleep(1)
