@@ -1,7 +1,7 @@
 # BicycleController.py
 # CRT
 # created 5/13/2018
-# last updated 5/13/2018
+# last updated 5/15/2018
 # defines the BicycleController class to manage the controller state machine
 
 from transitions import Machine

@@ -1,7 +1,7 @@
 # accelSensor.py
 # CRT
 # created 5/15/2018
-# last updated 5/15/2018
+# last updated 5/16/2018
 # provides functions to get accelerometer data
 
 # get gpio readings
@@ -38,6 +38,7 @@ REG_POWER_CTL = 0x2D
 # values for register writes
 VAL_MEAS_NORM = 0x02
 VAL_MEAS_AUTOSLEEP = 0x06
+VAL_MEAS_AS_WU = 0x0E
 VAL_ACTINACT_LOOP = 0x3F
 VAL_ACTINACT_DEFAULT = 0x0F
 VAL_INT_ACT = 0x10
@@ -130,7 +131,7 @@ class AccelSensor(object):
         self.spiWrite(REG_INTMAP1, [VAL_INT_ACT, VAL_INT_INACT])
         print(self.spiRead(REG_INTMAP1, 2))
         # go into autosleep mode
-        self.spiWrite(REG_POWER_CTL, [VAL_MEAS_AUTOSLEEP])
+        self.spiWrite(REG_POWER_CTL, [VAL_MEAS_AS_WU])
         print(self.spiRead(REG_POWER_CTL, 1))
 
     def readStatusReg(self):
