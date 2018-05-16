@@ -122,7 +122,9 @@ class AccelSensor(object):
     # power control
     def setupInterrupts(self):
         # set activity and inactivity thresholds, times, loop mode, and reference mode (not absolute)
-        self.spiWrite(REG_THRESH_ACT_L, [activityThreshLow, activityThreshHigh, actNumSamples, inactivityThreshLow, inactivityThreshHigh, inactNumSamplesLow, inactNumSamplesHigh, VAL_ACTINACT_LOOP])
+        interruptSettings = [activityThreshLow, activityThreshHigh, actNumSamples, inactivityThreshLow, inactivityThreshHigh, inactNumSamplesLow, inactNumSamplesHigh, VAL_ACTINACT_LOOP]
+        print(interruptSettings)
+        self.spiWrite(REG_THRESH_ACT_L, interruptSettings)
         print(self.spiRead(REG_THRESH_ACT_L, 7))
         # map the ACT -> INT1, INACT -> INT2
         self.spiWrite(REG_INTMAP1, [VAL_INT_ACT, VAL_INT_INACT])
