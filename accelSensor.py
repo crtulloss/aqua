@@ -55,7 +55,7 @@ int(activityThreshBytes)
 activityThreshHigh = int(activityThreshBytes) & 0xFF00
 activityThreshLow = int(activityThreshBytes) & 0x00FF
 
-inactivityThesh = 0.1
+inactivityThresh = 0.1
 inactivityThreshBytes = inactivityThresh / lsbToMPSS
 int(inactivityThreshBytes)
 inactivityThreshHigh = int(inactivityThreshBytes) & 0xFF00
