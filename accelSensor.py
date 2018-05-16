@@ -40,7 +40,7 @@ REG_POWER_CTL = 0x2D
 VAL_MEAS_NORM = 0x02
 
 # ADXL362 class, which is used to send SPI commands to the ADXL362 chip
-class accelSensor(object):
+class AccelSensor(object):
 
     def __init__(self):
         # set up SPI
