@@ -28,7 +28,7 @@ GPIO.add_event_detect(inactPin, GPIO.RISING, inactDetected)
 
 print('GPIO interrupts ready')
 print('clearing status register')
-accelSensor.clearInterrupts()
+print(accelSensor.clearInterrupts())
 
 while True:
     time.sleep(30)
