@@ -37,7 +37,7 @@ REG_POWER_CTL = 0x2D
 
 # values for register writes
 VAL_MEAS_NORM = 0x02
-VAL_MEAS_AUTOSLEEP = 0x06
+VAL_MEAS_AUTOSLEEP = 0x04
 VAL_ACTINACT_LOOP = 0x3F
 VAL_INT_ACT = 0x10
 VAL_INT_INACT = 0x20
@@ -49,21 +49,18 @@ numDataBits = 16
 
 lsbToMPSS = 0.0098
 
-# activity and inactivity thresholds in m/s^2
-activityThresh = 0
-activityThreshBytes = activityThresh / lsbToMPSS
-int(activityThreshBytes)
-activityThreshHigh = int(activityThreshBytes) & 0xFF00
+# activity and inactivity thresholds in mg - these are sample values
+# from datasheet
+activityThreshBytes = 250
+activityThreshHigh = (int(activityThreshBytes) & 0xFF00) >> 8
 activityThreshLow = int(activityThreshBytes) & 0x00FF
 
-inactivityThresh = 0.1
-inactivityThreshBytes = inactivityThresh / lsbToMPSS
-int(inactivityThreshBytes)
-inactivityThreshHigh = int(inactivityThreshBytes) & 0xFF00
+inactivityThreshBytes = 150
+inactivityThreshHigh = (int(inactivityThreshBytes) & 0xFF00) >> 8
 inactivityThreshLow = int(inactivityThreshBytes) & 0x00FF
 
 # activity and inactivity times
-actTime = 1.0
+actTime = 0.5
 inactTime = 60.0
 # default data rate
 odr = 100
@@ -71,8 +68,10 @@ actNumSamples = int(actTime * odr)
 if (actNumSamples > 0xFF):
     actNumSample = 0xFF
 inactNumSamples = int(inactTime * odr)
-if (inactNumSamples > 0xFF):
-    inactNumSample = 0xFF
+if (inactNumSamples > 0xFFFF):
+    inactNumSample = 0xFFFF
+inactNumSamplesHigh = (inactNumSamples & 0xFF00) >> 8
+inactNumSamplesLow = inactNumSamples & 0x00FF
 
 inactNumSamples = 1
 actNumSamples = 1
@@ -117,19 +116,20 @@ class AccelSensor(object):
         msb = num & (1 << (numBits-1))
         return num - (2 * msb)
 
-    # def setupInterrupts(self):
-    #     # set activity and inactivity thresholds, times, loop mode, and reference mode (not absolute)
-    #     self.spiWrite(REG_THRESH_ACT_L, [activityThreshLow, activityThreshHigh, actNumSamples, inactivityThreshLow, inactivityThreshHigh, inactNumSamples, VAL_ACTINACT_LOOP])
-    #     print(self.spiRead(REG_THRESH_ACT_L, 7))
-    #     # map the ACT -> INT1, INACT -> INT2
-    #     self.spiWrite(REG_INTMAP1, [VAL_INT_ACT, VAL_INT_INACT])
-    #     print(self.spiRead(REG_INTMAP1, 2))
-    #     # go into autosleep mode
-    #     self.spiWrite(REG_POWER_CTL, [VAL_MEAS_AUTOSLEEP])
-    #     print(self.spiRead(REG_POWER_CTL, 1))
+    # set up operation for loop mode with activity and inactivity interrupts
+    # determined by the motion and time thesholds set above
+    # order is critical here. interrupt settings -> interrupt pin map ->
+    # power control
     def setupInterrupts(self):
-        self.spiWrite(REG_THRESH_ACT_L, [activityThreshLow, activityThreshHigh, actNumSamples])
-        self.spiWrite(REG_INTMAP1, [VAL_INT_ACT])
+        # set activity and inactivity thresholds, times, loop mode, and reference mode (not absolute)
+        self.spiWrite(REG_THRESH_ACT_L, [activityThreshLow, activityThreshHigh, actNumSamples, inactivityThreshLow, inactivityThreshHigh, inactNumSamplesLow, inactNumSamplesHigh, VAL_ACTINACT_LOOP])
+        print(self.spiRead(REG_THRESH_ACT_L, 7))
+        # map the ACT -> INT1, INACT -> INT2
+        self.spiWrite(REG_INTMAP1, [VAL_INT_ACT, VAL_INT_INACT])
+        print(self.spiRead(REG_INTMAP1, 2))
+        # go into autosleep mode
+        self.spiWrite(REG_POWER_CTL, [VAL_MEAS_AUTOSLEEP])
+        print(self.spiRead(REG_POWER_CTL, 1))
 
     def readStatusReg(self):
         return self.spiRead(REG_STATUS, 1)
@@ -143,16 +143,10 @@ class AccelSensor(object):
         self.spi.mode = 0b00
         # recommended speeds 1MHz - 8MHz
         self.spi.max_speed_hz = 1000000
-
         # soft reset
         print('soft reset')
         self.spiWrite(REG_SOFT_RESET, [VAL_SOFT_RESET])
-
-        # start measurement mode
-        print('beginning accel measurement mode')
-        self.spiWrite(REG_POWER_CTL, [VAL_MEAS_NORM])
-
-        # setup interrupts
+        # setup interrupts and mode
         print('setting up accel interrupts')
         self.setupInterrupts()
 
