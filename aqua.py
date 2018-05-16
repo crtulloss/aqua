@@ -61,6 +61,8 @@ print(adxl.clearInterrupts())
 
 # lurk patiently in the background, forever....
 while True:
+    print('lurking')
+    print(aqC.state)
     if (aqC.state == 'nap'):
         time.sleep(100000000)
     elif (aqC.state == 'commute'):
