@@ -42,10 +42,11 @@ aqC = BicycleController(adxl)
 
 # lurk patiently in the background, forever....
 def lurk():
-    if (aqC.state == 'nap'):
-        time.sleep(100000000)
-    elif (aqC.state == 'commute'):
-        aqC.monitorSensors()
+    while True:
+        if (aqC.state == 'nap'):
+            time.sleep(100000000)
+        elif (aqC.state == 'commute'):
+            aqC.monitorSensors()
 
 # setup accelerometer interrupts - state machine transitions
 def actDetected(pin):
