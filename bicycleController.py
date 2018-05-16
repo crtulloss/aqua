@@ -57,7 +57,6 @@ class BicycleController(Machine):
             print('creating new data files')
             self.accelFileName = dataLogger.makeFileName('accel')
             self.gpsFileName = dataLogger.makeFileName('gps')
-            print(self.gpsFileName)
             self.freshData = True
             # so that we don't accidentally create new files again
             self.previous = 'ride'
