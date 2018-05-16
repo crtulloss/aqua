@@ -104,5 +104,5 @@ class AccelSensor(object):
 
 adxl = AccelSensor()
 while True:
-    adxl.readXYZ()
+    print(adxl.readXYZ())
     time.sleep(1)
