@@ -131,7 +131,7 @@ class AccelSensor(object):
         self.spiWrite(REG_INTMAP1, [VAL_INT_ACT, VAL_INT_INACT])
         print(self.spiRead(REG_INTMAP1, 2))
         # go into autosleep mode
-        self.spiWrite(REG_POWER_CTL, [VAL_MEAS_AS_WU])
+        self.spiWrite(REG_POWER_CTL, [VAL_MEAS_AUTOSLEEP])
         print(self.spiRead(REG_POWER_CTL, 1))
 
     def readStatusReg(self):
