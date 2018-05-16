@@ -116,16 +116,19 @@ class AccelSensor(object):
         msb = num & (1 << (numBits-1))
         return num - (2 * msb)
 
+    # def setupInterrupts(self):
+    #     # set activity and inactivity thresholds, times, loop mode, and reference mode (not absolute)
+    #     self.spiWrite(REG_THRESH_ACT_L, [activityThreshLow, activityThreshHigh, actNumSamples, inactivityThreshLow, inactivityThreshHigh, inactNumSamples, VAL_ACTINACT_LOOP])
+    #     print(self.spiRead(REG_THRESH_ACT_L, 7))
+    #     # map the ACT -> INT1, INACT -> INT2
+    #     self.spiWrite(REG_INTMAP1, [VAL_INT_ACT, VAL_INT_INACT])
+    #     print(self.spiRead(REG_INTMAP1, 2))
+    #     # go into autosleep mode
+    #     self.spiWrite(REG_POWER_CTL, [VAL_MEAS_AUTOSLEEP])
+    #     print(self.spiRead(REG_POWER_CTL, 1))
     def setupInterrupts(self):
-        # set activity and inactivity thresholds, times, loop mode, and reference mode (not absolute)
-        self.spiWrite(REG_THRESH_ACT_L, [activityThreshLow, activityThreshHigh, actNumSamples, inactivityThreshLow, inactivityThreshHigh, inactNumSamples, VAL_ACTINACT_LOOP])
-        print(self.spiRead(REG_THRESH_ACT_L, 7))
-        # map the ACT -> INT1, INACT -> INT2
-        self.spiWrite(REG_INTMAP1, [VAL_INT_ACT, VAL_INT_INACT])
-        print(self.spiRead(REG_INTMAP1, 2))
-        # go into autosleep mode
-        self.spiWrite(REG_POWER_CTL, [VAL_MEAS_AUTOSLEEP])
-        print(self.spiRead(REG_POWER_CTL, 1))
+        self.spiWrite(REG_THRESH_ACT_L, [activityThreshLow, activityThreshHigh, actNumSamples])
+        self.spiWrite(REG_INTMAP1, [VAL_INT_ACT])
 
     def readStatusReg(self):
         return self.spiRead(REG_STATUS, 1)
