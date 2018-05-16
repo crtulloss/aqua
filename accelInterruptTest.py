@@ -33,4 +33,4 @@ print(accelSensor.clearInterrupts())
 
 while True:
     accelSensor.getXYZData()
-    sleep(5)
+    time.sleep(5)
