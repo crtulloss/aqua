@@ -43,11 +43,14 @@ aqC = BicycleController(adxl)
 # the normal behavior of a daemon is to lurk
 def lurk():
     if (aqC.state == 'nap'):
-        pass
+        time.sleep(10)
     elif (aqC.state == 'commute'):
         print('waiting %d seconds' % BicycleController.timeBetweenGPSReads)
         time.sleep(BicycleController.timeBetweenGPSReads)
-        aqC.monitorSensors()
+        # temporary fix: if inactivity interrupt comes during this sleep,
+        # we are no longer in the commute state, so we shouldn't do this
+        if (aqC.state == 'commute'):
+            aqC.monitorSensors()
 
 # setup accelerometer interrupts - state machine transitions
 def actDetected(pin):

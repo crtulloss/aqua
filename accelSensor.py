@@ -54,7 +54,7 @@ lsbToMPSS = 0.0098
 
 # activity and inactivity thresholds in mg - these are sample values
 # from datasheet
-activityThreshBytes = 250
+activityThreshBytes = 1000
 activityThreshHigh = (int(activityThreshBytes) & 0xFF00) >> 8
 activityThreshLow = int(activityThreshBytes) & 0x00FF
 
