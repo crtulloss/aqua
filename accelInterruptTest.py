@@ -31,6 +31,6 @@ time.sleep(5)
 print('clearing status register')
 print(accelSensor.clearInterrupts())
 
-while True:
-    accelSensor.getXYZData()
-    time.sleep(5)
+# while True:
+#     print(accelSensor.getXYZData())
+#     time.sleep(5)
