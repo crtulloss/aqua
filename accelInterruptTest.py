@@ -17,10 +17,10 @@ inactPin = 31
 GPIO.setwarnings(False)
 GPIO.setup([actPin, inactPin], GPIO.IN)
 
-def actDetected():
+def actDetected(pin):
     print('activity detected!')
 
-def inactDetected():
+def inactDetected(pin):
     print('inactivity detected!')
 
 GPIO.add_event_detect(actPin, GPIO.RISING, actDetected)
