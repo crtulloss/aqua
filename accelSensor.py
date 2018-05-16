@@ -40,18 +40,18 @@ REG_POWER_CTL = 0x2D
 VAL_MEAS_NORM = 0x02
 
 # ADXL362 class, which is used to send SPI commands to the ADXL362 chip
-class ADXL362(object):
+class accelSensor(object):
 
     def __init__(self):
         # set up SPI
         self.spi = spidev.SpiDev()
-        spi.open(0,0)
+        self.spi.open(0,0)
         # CPHA = CPOL = 0
-        spi.mode = 0b00
+        self.spi.mode = 0b00
         # recommended speeds 1MHz - 8MHz
-        spi.max_speed_hz = 1000000
+        self.spi.max_speed_hz = 1000000
 
-        self.numDataBits = 12
+        self.self.numDataBits = 12
 
         self.lsbToMPS = 0.0098
 
