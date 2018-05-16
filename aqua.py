@@ -45,6 +45,8 @@ def lurk():
     if (aqC.state == 'nap'):
         pass
     elif (aqC.state == 'commute'):
+        print('waiting %d seconds' % BicycleController.timeBetweenGPSReads)
+        time.sleep(BicycleController.timeBetweenGPSReads)
         aqC.monitorSensors()
 
 # setup accelerometer interrupts - state machine transitions
@@ -52,7 +54,6 @@ def actDetected(pin):
     print('activity detected!')
     if (aqC.state == 'nap'):
         aqC.awaken()
-        lurk()
 
 def inactDetected(pin):
     print('inactivity detected!')
