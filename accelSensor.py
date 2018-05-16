@@ -60,14 +60,14 @@ class AccelSensor(object):
 
     # read XYZ data
     def readXYZ(self):
-        data = spiRead(REG_X_L, 6)
+        data = self.spiRead(REG_X_L, 6)
         xBits = (data[0] + (data[1] << 8))
         yBits = (data[2] + (data[3] << 8))
         zBits = (data[4] + (data[5] << 8))
 
-        xTwos = twosComp(xBits, self.numDataBits)
-        yTwos = twosComp(yBits, self.numDataBits)
-        zTwos = twosComp(zBits, self.numDataBits)
+        xTwos = self.twosComp(xBits, self.numDataBits)
+        yTwos = self.twosComp(yBits, self.numDataBits)
+        zTwos = self.twosComp(zBits, self.numDataBits)
 
         xVal = self.lsbToMPS * float(xTwos)
         yVal = self.lsbToMPS * float(yTwos)
