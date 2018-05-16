@@ -41,6 +41,7 @@ VAL_MEAS_AUTOSLEEP = 0x06
 VAL_ACTINACT_LOOP = 0x3F
 VAL_INT_ACT = 0x10
 VAL_INT_INACT = 0x20
+VAL_SOFT_RESET = 0x52
 
 # these data are 12-bit but twos-complement uses sign extension
 # so for all intents and purposes it is 16-bit
@@ -142,6 +143,10 @@ class AccelSensor(object):
         self.spi.mode = 0b00
         # recommended speeds 1MHz - 8MHz
         self.spi.max_speed_hz = 1000000
+
+        # soft reset
+        print('soft reset')
+        self.spiWrite(REG_SOFT_RESET, [VAL_SOFT_RESET])
 
         # start measurement mode
         print('beginning accel measurement mode')
