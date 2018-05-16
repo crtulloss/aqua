@@ -44,8 +44,8 @@ print(aqC.state)
 # setup accelerometer interrupts - state machine transitions
 def actDetected(pin):
     print('activity detected!')
-	if (aqC.state == 'nap'):
-		aqC.awaken()
+    if (aqC.state == 'nap'):
+        aqC.awaken()
 
 def inactDetected(pin):
     print('inactivity detected!')
