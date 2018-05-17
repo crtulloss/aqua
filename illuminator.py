@@ -6,12 +6,9 @@
 import RPi.GPIO as GPIO
 import time
 
-# LEDs
+# LED pins
 leftLights = 18
 rightLights = 16
-# turn buttons
-leftTurn = 15
-rightTurn = 13
 
 # pretty self-explanatory
 def lightsOff():
