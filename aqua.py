@@ -91,7 +91,7 @@ def doLights():
 def turnButton(pin):
     # not enabled during naps
     if not (aqC.state == 'nap'):
-        if (pin = leftTurn):
+        if (pin == leftTurn):
             # if already in a turn, finish the turn
             # could end up back in this interrupt, but that's ok
             # because the last thing that will happen is always
@@ -112,6 +112,7 @@ def turnButton(pin):
 
 GPIO.add_event_detect(actPin, GPIO.RISING, actDetected)
 GPIO.add_event_detect(inactPin, GPIO.RISING, inactDetected)
+GPIO.add_event_detect([leftTurn, rightTurn], GPIO.RISING, turnButton)
 logging.info('GPIO interrupts ready')
 time.sleep(5)
 logging.info('clearing accel status register')
