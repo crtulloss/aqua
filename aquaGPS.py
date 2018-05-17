@@ -30,7 +30,7 @@ homeWest = -71.4077		# benefit (curves) and angell
 
 # Check for a GPS fix
 def checkForFix():
-	printAndLog("checking for fix")
+	utility.printAndLog("checking for fix")
 	# Start the serial connection
 	ser=serial.Serial('/dev/serial0', 115200, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, timeout=1)
 	# Turn on the GPS
@@ -46,13 +46,13 @@ def checkForFix():
 			response = str(ser.readline())
 			# Check if a fix was found
 			if ("+CGNSINF: 1,1," in response):
-				printAndLog("fix found")
+				utility.printAndLog("fix found")
 				return True
 			# If a fix wasn't found, wait and try again
 			if ("+CGNSINF: 1,0," in response):
 				sleep(5)
 				ser.write(gpsCheck.encode())
-				printAndLog("still looking for fix")
+				utility.printAndLog("still looking for fix")
 				return False
 			else:
 				# still waiting for response
@@ -69,9 +69,9 @@ def getCoord():
 			# Split the reading by commas and return the parts referencing lat and long
 			array = response.split(",")
 			lat = array[3]
-			printAndLog("Latitude: %s" % lat)
+			utility.printAndLog("Latitude: %s" % lat)
 			lon = array[4]
-			printAndLog("Longitude: %s\n" % lon)
+			utility.printAndLog("Longitude: %s\n" % lon)
 			# turn GPS off
 			ser.write(gpsPowerOff.encode())
 			return (lat,lon)

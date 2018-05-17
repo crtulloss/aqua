@@ -23,6 +23,7 @@ import aquaGPS
 import darknessSensor
 import illuminator
 import dataLogger
+import utility
 
 # logging setup
 # for the debugging level, info messages will be logged, along with errors
@@ -59,7 +60,7 @@ illuminator.sign()
 
 # the normal behavior of a daemon is to lurk
 def lurk():
-    printAndLog('lurking for %d seconds' % lurkDowntime)
+    utility.printAndLog('lurking for %d seconds' % lurkDowntime)
     time.sleep(lurkDowntime)
     if (aqC.state == 'nap'):
         pass
@@ -68,12 +69,12 @@ def lurk():
 
 # setup accelerometer interrupts - state machine transitions
 def actDetected(pin):
-    printAndLog('activity detected!')
+    utility.printAndLog('activity detected!')
     if (aqC.state == 'nap'):
         aqC.awaken()
 
 def inactDetected(pin):
-    printAndLog('inactivity detected!')
+    utility.printAndLog('inactivity detected!')
     if (aqC.state == 'commute'):
         aqC.slumber()
 
@@ -114,9 +115,9 @@ GPIO.add_event_detect(actPin, GPIO.RISING, actDetected)
 GPIO.add_event_detect(inactPin, GPIO.RISING, inactDetected)
 GPIO.add_event_detect(leftTurn, GPIO.RISING, turnButton, bouncetime=1000)
 GPIO.add_event_detect(rightTurn, GPIO.RISING, turnButton, bouncetime=1000)
-printAndLog('GPIO interrupts ready')
+utility.printAndLog('GPIO interrupts ready')
 time.sleep(5)
-printAndLog('clearing accel status register')
+utility.printAndLog('clearing accel status register')
 adxl.clearInterrupts()
 
 # lurk patiently in the background, forever....

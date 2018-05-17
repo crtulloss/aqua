@@ -23,14 +23,14 @@ class BicycleController(Machine):
     # STATE CALLBACKS
     # on_enter callback for nap
     def housekeep(self):
-        printAndLog('housekeeping')
+        utility.printAndLog('housekeeping')
         illuminator.sign()
         dataLogger.uploadData(self)
 
     # on_enter callback for commute
     # also called by aqua when we are in the commute state
     def monitorSensors(self):
-        printAndLog('monitoring sensors')
+        utility.printAndLog('monitoring sensors')
         # check darkness and adjust LEDs appropriately
         if (darknessSensor.isDark()):
             illuminator.lightsOn()
@@ -46,7 +46,7 @@ class BicycleController(Machine):
 
     # on_enter callback for ride
     def collectData(self):
-        printAndLog('riding')
+        utility.printAndLog('riding')
         # check darkness and adjust LEDs appropriately
         if (darknessSensor.isDark()):
             illuminator.lightsOn()
@@ -54,7 +54,7 @@ class BicycleController(Machine):
             illuminator.lightsOff()
         # check previous state - if commute, make new data file
         if (self.previous == 'commute'):
-            printAndLog('creating new data files')
+            utility.printAndLog('creating new data files')
             self.accelFileName = dataLogger.makeFileName('accel')
             self.gpsFileName = dataLogger.makeFileName('gps')
             self.freshData = True
@@ -62,7 +62,7 @@ class BicycleController(Machine):
             self.previous = 'ride'
         # otherwise, use the one that already exists
         else:
-            printAndLog('using existing data files')
+            utility.printAndLog('using existing data files')
             dataLogger.writeToFile(self.accelFileName, self.accelDataBuffer)
             self.accelDataBuffer = ''
         # main data collection: accelerometer
