@@ -24,7 +24,7 @@ class BicycleController(Machine):
     # on_enter callback for nap
     def housekeep(self):
         logging.info('housekeeping')
-        illuminator.signoff()
+        illuminator.sign()
         dataLogger.uploadData(self)
 
     # on_enter callback for commute

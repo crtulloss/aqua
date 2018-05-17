@@ -57,8 +57,8 @@ adxl = AccelSensor()
 # setup controller
 aqC = BicycleController(adxl)
 
-# lights off at first
-illuminator.lightsOff()
+# hello
+illuminator.sign()
 
 # the normal behavior of a daemon is to lurk
 def lurk():

@@ -43,7 +43,7 @@ def blinkLeft():
     time.sleep(0.5)
 
 # when going inactive, sign my initials so I know it's working
-def signoff():
+def sign():
     lightsOff()
     for letter in signoffSeq:
         for part in letter:
