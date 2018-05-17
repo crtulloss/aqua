@@ -39,10 +39,11 @@ actPin = 29
 inactPin = 31
 # turn buttons
 leftTurn = 15
-rightTurn = 13
+endTurn = 13
+rightTurn = 11
 
 GPIO.setwarnings(False)
-GPIO.setup([actPin, inactPin, leftTurn, rightTurn], GPIO.IN)
+GPIO.setup([actPin, inactPin, leftTurn, rightTurn, endTurn], GPIO.IN)
 GPIO.setup([illuminator.leftLights, illuminator.rightLights], GPIO.OUT)
 
 requests.get(dataLogger.publicURL, params={'sheet':'aqua daemon tests', 'Status': 'ALIVE'})
@@ -92,7 +93,7 @@ def turnButton(pin):
             while (aqC.turningLeft):
                 # blink and check for the signal to stop
                 illuminator.blinkLeft()
-                if (GPIO.input(leftTurn)):
+                if (GPIO.input(endTurn)):
                     print('ending turn')
                     aqC.turningLeft = False
                     doLights()
@@ -103,7 +104,7 @@ def turnButton(pin):
             while (aqC.turningRight):
                 # blink and check for the signal to stop
                 illuminator.blinkRight()
-                if (GPIO.input(rightTurn)):
+                if (GPIO.input(endTurn)):
                     print('ending turn')
                     aqC.turningRight = False
                     doLights()
