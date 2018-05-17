@@ -15,18 +15,18 @@ gpsPowerCheck = "AT+CGNSPWR?\r"
 gpsPowerOn = "AT+CGNSPWR=1\r"
 gpsPowerOff = "AT+CGNSPWR=0\r"
 
-#homeNorth = 41.8357		# olney street
-#homeSouth = 41.8226		# williams street
+homeNorth = 41.8357		# olney street
+homeSouth = 41.8226		# williams street
 
-#homeEast = -71.3904		# gano street
-#homeWest = -71.4077		# benefit (curves) and angell
+homeEast = -71.3904		# gano street
+homeWest = -71.4077		# benefit (curves) and angell
 
 # close boundaries around brick house, for testing
-homeNorth = 41.8293
-homeSouth = 41.8285
-
-homeWest = -71.3940
-homeEast = -71.3932
+# homeNorth = 41.8293
+# homeSouth = 41.8285
+#
+# homeWest = -71.3940
+# homeEast = -71.3932
 
 # Check for a GPS fix
 def checkForFix():
