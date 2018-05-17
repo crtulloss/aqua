@@ -34,6 +34,8 @@ inactPin = 31
 GPIO.setwarnings(False)
 GPIO.setup([actPin, inactPin], GPIO.IN)
 
+requests.get(dataLogger.publicURL, params={'sheet':'aqua daemon tests'. 'Status': 'ALIVE'})
+
 # setup accelerometer (including interrupts)
 adxl = AccelSensor()
 
