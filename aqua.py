@@ -103,8 +103,8 @@ def turnButton(pin):
                 while (turningLeft):
                     illuminator.blinkLeft()
         else:
-            if (turningLeft):
-                turningLeft = False
+            if (turningRight):
+                turningRight = False
             else:
                 while (turningLeft):
                     illuminator.blinkLeft()
