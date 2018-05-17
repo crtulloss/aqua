@@ -11,6 +11,8 @@
 # also note that it won't work on a PC because we don't have access to smbus
 import tsl2591
 
+import logging
+
 # darkness threshold
 darknessThreshold = 16.0
 
@@ -24,8 +26,8 @@ def isDark():
     lux = aquaTSL2591.calculate_lux(full,ir)
     # compare against threshold
     if (lux < darknessThreshold):
-        print("it's dark!")
+        logging.info("it's dark!")
         return True
     else:
-        print("it's light!")
+        logging.info("it's light!")
         return False

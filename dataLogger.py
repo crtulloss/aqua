@@ -6,6 +6,7 @@
 
 import time
 import requests
+import logging
 
 # data logging spreadsheet settings
 publicURL = 'https://script.google.com/macros/s/AKfycbxKm2AWyX6unin8LXDkbL7l1SUre2bDJNTTGUyMk9VhXmJRgMs/exec'
@@ -58,11 +59,11 @@ def uploadData(controllerInstance):
                 # no more fresh data
                 fd = False
                 controllerInstance.freshData = False
-                print('data logged succesfully')
+                logging.info('data logged succesfully')
                 return True
             # if no wifi, try again later
             except requests.exceptions.ConnectionError:
-                print('no WiFi right now')
+                logging.info('no WiFi right now')
                 time.sleep(wifiCheckTime)
     else:
-        print('no data to log!')
+        logging.info('no data to log!')

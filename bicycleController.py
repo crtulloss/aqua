@@ -6,6 +6,8 @@
 
 from transitions import Machine
 import time
+import logging
+
 import aquaGPS
 import darknessSensor
 import illuminator
@@ -21,7 +23,7 @@ class BicycleController(Machine):
     # STATE CALLBACKS
     # on_enter callback for nap
     def housekeep(self):
-        print('housekeeping')
+        logging.info('housekeeping')
         illuminator.lightsOff()
         #turnGPSOff()
         dataLogger.uploadData(self)
@@ -29,7 +31,7 @@ class BicycleController(Machine):
     # on_enter callback for commute
     # also called by aqua when we are in the commute state
     def monitorSensors(self):
-        print('monitoring sensors')
+        logging.info('monitoring sensors')
         #while True:
         # check darkness and adjust LEDs appropriately
         if (darknessSensor.isDark()):
@@ -46,7 +48,7 @@ class BicycleController(Machine):
 
     # on_enter callback for ride
     def collectData(self):
-        print('riding')
+        logging.info('riding')
         # check darkness and adjust LEDs appropriately
         if (darknessSensor.isDark()):
             illuminator.lightsOn()
@@ -54,7 +56,7 @@ class BicycleController(Machine):
             illuminator.lightsOff()
         # check previous state - if commute, make new data file
         if (self.previous == 'commute'):
-            print('creating new data files')
+            logging.info('creating new data files')
             self.accelFileName = dataLogger.makeFileName('accel')
             self.gpsFileName = dataLogger.makeFileName('gps')
             self.freshData = True
@@ -62,7 +64,7 @@ class BicycleController(Machine):
             self.previous = 'ride'
         # otherwise, use the one that already exists
         else:
-            print('using existing data files')
+            logging.info('using existing data files')
             dataLogger.writeToFile(self.accelFileName, self.accelDataBuffer)
             self.accelDataBuffer = ''
         # main data collection: accelerometer
