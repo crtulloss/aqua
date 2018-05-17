@@ -90,6 +90,7 @@ def turnButton(pin):
     if (aqC.state == 'commute'):
         if (pin == leftTurn):
             # begin turn
+            utility.printAndLog('beginning left turn')
             aqC.turningLeft = True
             while (aqC.turningLeft):
                 # blink and check for the signal to stop
@@ -101,6 +102,7 @@ def turnButton(pin):
                     return
         else:
             # begin turn
+            utility.printAndLog('beginning left turn')
             aqC.turningRight = True
             while (aqC.turningRight):
                 # blink and check for the signal to stop
