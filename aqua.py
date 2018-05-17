@@ -93,6 +93,7 @@ def turnButton(pin):
                 # blink and check for the signal to stop
                 illuminator.blinkLeft()
                 if (GPIO.input(leftTurn)):
+                    print('ending turn')
                     aqC.turningLeft = False
         else:
             # begin turn
@@ -101,6 +102,7 @@ def turnButton(pin):
                 # blink and check for the signal to stop
                 illuminator.blinkRight()
                 if (GPIO.input(rightTurn)):
+                    print('ending turn')
                     aqC.turningRight = False
 
 GPIO.add_event_detect(actPin, GPIO.RISING, actDetected)
