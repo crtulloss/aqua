@@ -48,7 +48,7 @@ def sign():
     for letter in signoffSeq:
         for part in letter:
             lightsOn()
-            time.sleep(unit)
+            time.sleep(part)
             lightsOff()
             time.sleep(unit)
         time.sleep(dash - unit)
