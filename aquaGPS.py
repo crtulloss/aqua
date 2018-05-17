@@ -9,6 +9,8 @@ import serial
 from time import sleep
 import logging
 
+import utility
+
 # GPS interaction strings
 gpsCheck = "AT+CGNSINF\r"
 gpsPowerCheck = "AT+CGNSPWR?\r"

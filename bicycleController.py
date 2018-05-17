@@ -12,6 +12,7 @@ import aquaGPS
 import darknessSensor
 import illuminator
 import dataLogger
+import utility
 
 # Controller class, which inherits the Machine class
 class BicycleController(Machine):

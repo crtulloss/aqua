@@ -13,6 +13,7 @@ import tsl2591
 
 import logging
 
+import utility
 # darkness threshold
 darknessThreshold = 16.0
 

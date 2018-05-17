@@ -12,6 +12,8 @@ import spidev
 import time
 import logging
 
+import utility
+
 # commands
 COMMAND_WRITE = 0x0A
 COMMAND_READ = 0x0B
