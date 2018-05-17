@@ -115,8 +115,8 @@ def turnButton(pin):
 
 GPIO.add_event_detect(actPin, GPIO.RISING, actDetected)
 GPIO.add_event_detect(inactPin, GPIO.RISING, inactDetected)
-GPIO.add_event_detect(leftTurn, GPIO.RISING, turnButton, bouncetime=1000)
-GPIO.add_event_detect(rightTurn, GPIO.RISING, turnButton, bouncetime=1000)
+GPIO.add_event_detect(leftTurn, GPIO.RISING, turnButton, bouncetime=5000)
+GPIO.add_event_detect(rightTurn, GPIO.RISING, turnButton, bouncetime=5000)
 utility.printAndLog('GPIO interrupts ready')
 time.sleep(5)
 utility.printAndLog('clearing accel status register')
