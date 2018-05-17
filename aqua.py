@@ -41,6 +41,10 @@ inactPin = 31
 leftTurn = 15
 rightTurn = 13
 
+# global variables to keep track of whether we are turning
+turningRight = False
+turningLeft = False
+
 GPIO.setwarnings(False)
 GPIO.setup([actPin, inactPin, leftTurn, rightTurn], GPIO.IN)
 GPIO.setup([illuminator.leftLights, illuminator.rightLights], GPIO.OUT)
@@ -72,6 +76,36 @@ def inactDetected(pin):
     logging.info('inactivity detected!')
     if (aqC.state == 'commute'):
         aqC.slumber()
+
+# choose whether to turn lights on or off
+def doLights():
+    if (darknessSensor.isDark()):
+        illuminator.lightsOn()
+    else:
+        illuminator.lightsOff()
+
+# turn interrupts
+def turnButton(pin):
+    # not enabled during naps
+    if not (aqC.state == 'nap')
+        if (pin = leftTurn):
+            # if already in a turn, finish the turn
+            # could end up back in this interrupt, but that's ok
+            # because the last thing that will happen is always
+            # regular old doLights()
+            if (turningLeft):
+                turningLeft = False
+            else:
+                # othewise, blink the lights until turn is complete
+                while (turningLeft):
+                    illuminator.blinkLeft()
+        else:
+            if (turningLeft):
+                turningLeft = False
+            else:
+                while (turningLeft):
+                    illuminator.blinkLeft()
+        doLights()
 
 GPIO.add_event_detect(actPin, GPIO.RISING, actDetected)
 GPIO.add_event_detect(inactPin, GPIO.RISING, inactDetected)

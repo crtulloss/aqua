@@ -25,7 +25,6 @@ class BicycleController(Machine):
     def housekeep(self):
         logging.info('housekeeping')
         illuminator.lightsOff()
-        #turnGPSOff()
         dataLogger.uploadData(self)
 
     # on_enter callback for commute
