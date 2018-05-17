@@ -43,7 +43,7 @@ rightTurn = 13
 
 GPIO.setwarnings(False)
 GPIO.setup([actPin, inactPin, leftTurn, rightTurn], GPIO.IN)
-GPIO.setup([illuminator.leftLights, illuminator.ightLights], GPIO.OUT)
+GPIO.setup([illuminator.leftLights, illuminator.rightLights], GPIO.OUT)
 
 requests.get(dataLogger.publicURL, params={'sheet':'aqua daemon tests', 'Status': 'ALIVE'})
 
