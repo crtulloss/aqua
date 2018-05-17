@@ -34,10 +34,13 @@ lurkDowntime = 30
 # GPIO setup
 # mode: pin number
 GPIO.setmode(GPIO.BOARD)
+# accelerometer interrupts
 actPin = 29
 inactPin = 31
+
 GPIO.setwarnings(False)
-GPIO.setup([actPin, inactPin], GPIO.IN)
+GPIO.setup([actPin, inactPin, leftTurn, rightTurn], GPIO.IN)
+GPIO.setup([leftLights, rightLights], GPIO.OUT)
 
 requests.get(dataLogger.publicURL, params={'sheet':'aqua daemon tests', 'Status': 'ALIVE'})
 
