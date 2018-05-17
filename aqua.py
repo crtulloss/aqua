@@ -41,10 +41,6 @@ inactPin = 31
 leftTurn = 15
 rightTurn = 13
 
-# global variables to keep track of whether we are turning
-turningRight = False
-turningLeft = False
-
 GPIO.setwarnings(False)
 GPIO.setup([actPin, inactPin, leftTurn, rightTurn], GPIO.IN)
 GPIO.setup([illuminator.leftLights, illuminator.rightLights], GPIO.OUT)
@@ -96,17 +92,17 @@ def turnButton(pin):
             # could end up back in this interrupt, but that's ok
             # because the last thing that will happen is always
             # regular old doLights()
-            if (turningLeft):
-                turningLeft = False
+            if (aqC.turningLeft):
+                aqC.turningLeft = False
             else:
                 # othewise, blink the lights until turn is complete
-                while (turningLeft):
+                while (aqC.turningLeft):
                     illuminator.blinkLeft()
         else:
-            if (turningRight):
-                turningRight = False
+            if (aqC.turningRight):
+                aqC.turningRight = False
             else:
-                while (turningLeft):
+                while (aqC.turningLeft):
                     illuminator.blinkLeft()
         doLights()
 

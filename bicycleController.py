@@ -119,6 +119,9 @@ class BicycleController(Machine):
 
         self.accel = acc
 
+        self.turningRight = False
+        self.turningLeft = False
+
         self.freshData = False
 
         self.add_transition('awaken', 'nap', 'commute')
