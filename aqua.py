@@ -57,6 +57,9 @@ adxl = AccelSensor()
 # setup controller
 aqC = BicycleController(adxl)
 
+# lights off at first
+illuminator.lightsOff()
+
 # the normal behavior of a daemon is to lurk
 def lurk():
     logging.info('lurking for %d seconds' % lurkDowntime)
@@ -87,7 +90,7 @@ def doLights():
 # turn interrupts
 def turnButton(pin):
     # not enabled during naps
-    if not (aqC.state == 'nap')
+    if not (aqC.state == 'nap'):
         if (pin = leftTurn):
             # if already in a turn, finish the turn
             # could end up back in this interrupt, but that's ok
