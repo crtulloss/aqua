@@ -93,17 +93,25 @@ def turnButton(pin):
             # because the last thing that will happen is always
             # regular old doLights()
             if (aqC.turningLeft):
+                logging.info('ending left turn')
+                print('ending left turn')
                 aqC.turningLeft = False
             else:
+                logging.info('beginning left turn')
+                print('beginning left turn')
                 # othewise, blink the lights until turn is complete
                 while (aqC.turningLeft):
                     illuminator.blinkLeft()
         else:
             if (aqC.turningRight):
+                logging.info('ending right turn')
+                print('ending right turn')
                 aqC.turningRight = False
             else:
-                while (aqC.turningLeft):
-                    illuminator.blinkLeft()
+                logging.info('beginning right turn')
+                print('beginning right turn')
+                while (aqC.turningRight):
+                    illuminator.blinkRight()
         doLights()
 
 GPIO.add_event_detect(actPin, GPIO.RISING, actDetected)
