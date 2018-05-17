@@ -135,7 +135,7 @@ class AccelSensor(object):
         return self.spiRead(REG_STATUS, 1)
 
     def __init__(self):
-        logging.info('setting up accelerometer SPI')
+        printAndLog('setting up accelerometer SPI')
         # set up SPI
         self.spi = spidev.SpiDev()
         self.spi.open(0,0)
@@ -144,9 +144,9 @@ class AccelSensor(object):
         # recommended speeds 1MHz - 8MHz
         self.spi.max_speed_hz = 1000000
         # soft reset
-        logging.info('accel soft reset')
+        printAndLog('accel soft reset')
         self.spiWrite(REG_SOFT_RESET, [VAL_SOFT_RESET])
         time.sleep(0.5)
         # setup interrupts and mode
-        logging.info('setting up accel interrupts')
+        printAndLog('setting up accel interrupts')
         self.setupInterrupts()

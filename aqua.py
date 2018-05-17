@@ -59,7 +59,7 @@ illuminator.sign()
 
 # the normal behavior of a daemon is to lurk
 def lurk():
-    logging.info('lurking for %d seconds' % lurkDowntime)
+    printAndLog('lurking for %d seconds' % lurkDowntime)
     time.sleep(lurkDowntime)
     if (aqC.state == 'nap'):
         pass
@@ -68,12 +68,12 @@ def lurk():
 
 # setup accelerometer interrupts - state machine transitions
 def actDetected(pin):
-    logging.info('activity detected!')
+    printAndLog('activity detected!')
     if (aqC.state == 'nap'):
         aqC.awaken()
 
 def inactDetected(pin):
-    logging.info('inactivity detected!')
+    printAndLog('inactivity detected!')
     if (aqC.state == 'commute'):
         aqC.slumber()
 
@@ -114,9 +114,9 @@ GPIO.add_event_detect(actPin, GPIO.RISING, actDetected)
 GPIO.add_event_detect(inactPin, GPIO.RISING, inactDetected)
 GPIO.add_event_detect(leftTurn, GPIO.RISING, turnButton, bouncetime=1000)
 GPIO.add_event_detect(rightTurn, GPIO.RISING, turnButton, bouncetime=1000)
-logging.info('GPIO interrupts ready')
+printAndLog('GPIO interrupts ready')
 time.sleep(5)
-logging.info('clearing accel status register')
+printAndLog('clearing accel status register')
 adxl.clearInterrupts()
 
 # lurk patiently in the background, forever....

@@ -15,6 +15,11 @@ sheetName = 'aqua state machine tests'
 # wifi check settings
 wifiCheckTime = 30
 
+# function to both print and log something, for demo purposes
+def printAndLog(string):
+    print(string)
+    logging.info(string)
+
 def makeFileName(sensor):
     t = time.localtime()
     return 'RideLog_%s_%s.txt' % (time.strftime("%Y:%m:%d:%H:%M:%S", t), sensor)
@@ -59,11 +64,11 @@ def uploadData(controllerInstance):
                 # no more fresh data
                 fd = False
                 controllerInstance.freshData = False
-                logging.info('data logged succesfully')
+                printAndLog('data logged succesfully')
                 return True
             # if no wifi, try again later
             except requests.exceptions.ConnectionError:
-                logging.info('no WiFi right now')
+                printAndLog('no WiFi right now')
                 time.sleep(wifiCheckTime)
     else:
-        logging.info('no data to log!')
+        printAndLog('no data to log!')

@@ -26,8 +26,8 @@ def isDark():
     lux = aquaTSL2591.calculate_lux(full,ir)
     # compare against threshold
     if (lux < darknessThreshold):
-        logging.info("it's dark!")
+        printAndLog("it's dark!")
         return True
     else:
-        logging.info("it's light!")
+        printAndLog("it's light!")
         return False
