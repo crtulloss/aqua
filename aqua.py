@@ -92,16 +92,16 @@ def turnButton(pin):
             while (aqC.turningLeft):
                 # blink and check for the signal to stop
                 illuminator.blinkLeft()
-                if (GPIO.input(lefTurn)):
-                    sqC.turningLeft = False
+                if (GPIO.input(leftTurn)):
+                    aqC.turningLeft = False
         else:
             # begin turn
-            aqC.turningLeft = True
-            while (aqC.turningLeft):
+            aqC.turningRight = True
+            while (aqC.turningRight):
                 # blink and check for the signal to stop
-                illuminator.blinkLeft()
-                if (GPIO.input(lefTurn)):
-                    sqC.turningLeft = False
+                illuminator.blinkRight()
+                if (GPIO.input(rightTurn)):
+                    aqC.turningRight = False
 
 GPIO.add_event_detect(actPin, GPIO.RISING, actDetected)
 GPIO.add_event_detect(inactPin, GPIO.RISING, inactDetected)
