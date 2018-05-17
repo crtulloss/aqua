@@ -95,6 +95,8 @@ def turnButton(pin):
                 if (GPIO.input(leftTurn)):
                     print('ending turn')
                     aqC.turningLeft = False
+                    doLights()
+                    return
         else:
             # begin turn
             aqC.turningRight = True
@@ -104,10 +106,8 @@ def turnButton(pin):
                 if (GPIO.input(rightTurn)):
                     print('ending turn')
                     aqC.turningRight = False
-    # wait for me to stop pressing, so we don't trigger another interrupt
-    while (GPIO.input(rightTurn) | GPIO.input(leftTurn)):
-        time.sleep(0.1)
-    doLights()
+                    doLights()
+                    return
 
 GPIO.add_event_detect(actPin, GPIO.RISING, actDetected)
 GPIO.add_event_detect(inactPin, GPIO.RISING, inactDetected)
