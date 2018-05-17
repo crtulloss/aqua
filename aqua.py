@@ -106,6 +106,7 @@ def turnButton(pin):
                     print('ending turn')
                     aqC.turningRight = False
                     return
+    doLights()
 
 GPIO.add_event_detect(actPin, GPIO.RISING, actDetected)
 GPIO.add_event_detect(inactPin, GPIO.RISING, inactDetected)
