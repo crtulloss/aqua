@@ -85,36 +85,23 @@ def doLights():
 
 # turn interrupts
 def turnButton(pin):
-    # not enabled during naps
-    if not (aqC.state == 'nap'):
+    if (aqC.state == 'commute'):
         if (pin == leftTurn):
-            aqC.turningLeft = not(aqC.turningLeft)
-            # blink lights until turn is complete
-            if (aqC.turningLeft):
-                logging.info('beginning left turn')
-                print('beginning left turn')
-                while (aqC.turningLeft):
-                    illuminator.blinkLeft()
-            # if already in a turn, finish the turn
-            # could end up back in this interrupt, but that's ok
-            # because the last thing that will happen is always
-            # regular old doLights()
-            else:
-                logging.info('ending left turn')
-                print('ending left turn')
-                aqC.turningLeft = False
+            # begin turn
+            aqC.turningLeft = True
+            while (aqC.turningLeft):
+                # blink and check for the signal to stop
+                illuminator.blinkLeft()
+                if (GPIO.input(lefTurn)):
+                    sqC.turningLeft = False
         else:
-            aqC.turningRight = not(aqC.turningRight)
-            if (aqC.turningRight):
-                logging.info('beginning right turn')
-                print('beginning right turn')
-                while (aqC.turningRight):
-                    illuminator.blinkRight()
-            else:
-                logging.info('ending right turn')
-                print('ending right turn')
-                aqC.turningRight = False
-        doLights()
+            # begin turn
+            aqC.turningLeft = True
+            while (aqC.turningLeft):
+                # blink and check for the signal to stop
+                illuminator.blinkLeft()
+                if (GPIO.input(lefTurn)):
+                    sqC.turningLeft = False
 
 GPIO.add_event_detect(actPin, GPIO.RISING, actDetected)
 GPIO.add_event_detect(inactPin, GPIO.RISING, inactDetected)

@@ -31,7 +31,6 @@ class BicycleController(Machine):
     # also called by aqua when we are in the commute state
     def monitorSensors(self):
         logging.info('monitoring sensors')
-        #while True:
         # check darkness and adjust LEDs appropriately
         if (darknessSensor.isDark()):
             illuminator.lightsOn()
