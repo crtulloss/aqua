@@ -55,6 +55,8 @@ def checkForFix():
 				sleep(5)
 				ser.write(gpsCheck.encode())
 				utility.printAndLog("still looking for fix")
+				# turn the GPS off to save power
+				ser.write(gpsPowerOff.encode())
 				return False
 			else:
 				# still waiting for response
