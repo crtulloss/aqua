@@ -13,6 +13,7 @@ import darknessSensor
 import illuminator
 import dataLogger
 import utility
+import emailer
 
 # Controller class, which inherits the Machine class
 class BicycleController(Machine):
@@ -98,6 +99,14 @@ class BicycleController(Machine):
         self.previous = self.state
         return self.previous
 
+    # before transition callbacks for COMMUTE->RIDE and RIDE->COMMUTE
+    # transitions. calls the email function, and indicates home=True
+    # for the back_again case
+    def emailThere():
+        emailer.sendEmail(False)
+    def emailBack():
+        emailer.sendEmail(True)
+
     # STATES
     nap = {'name':'nap', 'on_enter':['housekeep'], 'on_exit':['setPrevious']}
     commute = {'name':'commute', 'on_enter':['monitorSensors'], 'on_exit':['setPrevious']}
@@ -126,5 +135,5 @@ class BicycleController(Machine):
 
         self.add_transition('awaken', 'nap', 'commute')
         self.add_transition('slumber', 'commute', 'nap')
-        self.add_transition('there', 'commute', 'ride')
-        self.add_transition('back_again', 'ride', 'commute')
+        self.add_transition('there', 'commute', 'ride', before='emailThere')
+        self.add_transition('back_again', 'ride', 'commute', before='emailBack')

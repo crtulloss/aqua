@@ -1,8 +1,8 @@
-# hardwareInterfacer.py
+# dataLogger.py
 # CRT
 # created 5/14/2018
 # last updated 5/16/2018
-# provides miscellaneous utility functions
+# logs GPS and accel data to spreadsheet, only over WiFi
 
 import time
 import requests
